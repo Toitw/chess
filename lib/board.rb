@@ -4,6 +4,6 @@ class Board
   def initialize
     attr_accessor :board
 
-    @board = [1, 2, 3, 4, 5, 6, 7, 8].repeated_permutation(2).to_a
+    @board = Array.new(8) { Array.new(8, 0) }
   end
 end
