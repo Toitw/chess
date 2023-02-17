@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 
+require_relative "chessInitialPositions"
+
 class Board
   include ChessInitialPositions
 
+  attr_accessor :board
+
   def initialize
-    attr_accessor :board
 
     @board = Array.new(8) { Array.new(8, 0) }
   end
