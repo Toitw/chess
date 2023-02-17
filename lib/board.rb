@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Board
+  include ChessInitialPositions
+
   def initialize
     attr_accessor :board
 
