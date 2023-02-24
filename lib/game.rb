@@ -9,7 +9,6 @@ class Game
 
     def initialize
         @board = Board.new
-        @board.display_board
     end
 
 
