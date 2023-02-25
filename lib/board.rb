@@ -26,12 +26,11 @@ class Board
   end
 
   def display_board
-    puts "    0   1   2   3   4   5   6   7 "
     puts "  ---------------------------------"
-    @board.each_with_index do |row, y|
+    @board.transpose.reverse.each_with_index do |column, y|
       print "#{7-y} |"
 
-      row.each_with_index do |piece, x|
+      column.each do |piece|
         if piece.nil?
           print "   "
         else
@@ -43,5 +42,6 @@ class Board
       end
       puts "\n  ---------------------------------"
     end
+    puts "    0   1   2   3   4   5   6   7 "
   end
 end
