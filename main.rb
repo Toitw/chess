@@ -1,3 +1,3 @@
 require './lib/game'
 
-p Game.new.board
+Game.new.play

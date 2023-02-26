@@ -8,7 +8,7 @@ require_relative "visual"
 class Game
     attr_reader :board, :current_player
     def initialize
-        @board = Board.new
+        @board = nil
         @player1 = Player.new("Player1")
         @player2 = Player.new("Player2")
         @current_player = @player1
@@ -16,7 +16,12 @@ class Game
 
     def play
         puts "welcome"
-
+        2.times do
+            create_players
+        end
+        puts "\nLet's the game begins!"
+        @board = Board.new
+        puts "finish"
     end
 
     def choose_origin #Gets only valid letter + number, store it as an array in @current_player.origin, raise an error if invalid
