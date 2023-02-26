@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 
 class Player
-  def initialize(name = nil, color = nil)
-    attr_reader :name, :color
-    attr_accessor :origin, :destination
-
+  attr_accessor :origin, :destination, :name, :color
+  def initialize(name, color = nil)
     @name = name
     @color = color
     @origin = [] #This will choose the coordinate of the piece that current_player wants to move
