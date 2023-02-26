@@ -14,6 +14,11 @@ class Game
         @current_player = @player1
     end
 
+    def play
+        puts "welcome"
+
+    end
+
     def choose_origin #Gets only valid letter + number, store it as an array in @current_player.origin, raise an error if invalid
         begin
             raw_input = gets.chomp
@@ -28,14 +33,15 @@ class Game
         end
     end
 
-    def create_players
+    def create_players #This will be looped 2 times
         puts "#{@current_player.name}, what is your name?"
         @current_player.name = gets.chomp
         puts "Hello #{@current_player.name}, now choose with which color you play ('W' for whites, 'B' for blacks)"
+        check_color
         change_current_player
     end
 
-    def check_color
+    def check_color #Check for valid input and store the color, raise an error if invalid
         begin
           color = gets.chomp
           if color.match?(/^[wW]$/)
