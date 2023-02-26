@@ -28,7 +28,7 @@ class Board
   def display_board
     puts "  ---------------------------------"
     @board.transpose.reverse.each_with_index do |column, y|
-      print "#{7-y} |"
+      print "#{8-y} |"
 
       column.each do |piece|
         if piece.nil?
@@ -42,6 +42,6 @@ class Board
       end
       puts "\n  ---------------------------------"
     end
-    puts "    0   1   2   3   4   5   6   7 "
+    puts "    a   b   c   d   e   f   g   h "
   end
 end

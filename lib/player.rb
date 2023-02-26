@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Player
-  def initialize(name, color)
+  def initialize(name = nil, color = nil)
     attr_reader :name, :color
     attr_accessor :origin, :destination
 
