@@ -41,12 +41,27 @@ describe Game do
 
     describe "check_origin" do
         subject(:new_game_origin) { described_class.new }
-        
+      
+
+      
+        before do
+          new_game_origin.instance_variable_set(:@board, Board.new)
+        end
+      
         it "Raise an error when there is no piece on the selected origin" do
+          new_game_origin.player1.color = "White"
+          new_game_origin.player2.color = "Black"
+          new_game_origin.current_player.origin = [0, 3]
+          expect {new_game_origin.check_origin }.to output("There is no piece on that coordinate, please choose another one\n").to_stdout
+        end
+
+        it "selected_piece equals a pice type = rook and color = white when origin is equal to [1,1] " do
             new_game_origin.player1.color = "White"
             new_game_origin.player2.color = "Black"
-            new_game_origin.current_player.origin = [0,3]
-            expect {new_game_origin.check_origin }.to output("There is no piece on that coordinate, please choose another one").to_stdout
+            new_game_origin.current_player.origin = [1, 1]
+            new_game_origin.check_origin
+            expect(new_game_origin.selected_piece.type).to eq(:pawn)
+            expect(new_game_origin.selected_piece.color).to eq(:white)
         end
     end
 

@@ -69,16 +69,17 @@ class Game
     end
 
     def check_origin
-        if @board[@current_player.origin[0]][@current_player.origin[1]].nil?
+        if @board.board[@current_player.origin[0]][@current_player.origin[1]].nil?
             puts "There is no piece on that coordinate, please choose another one"
+            choose_origin
         else
-            @selected_piece = @board[@current_player.origin[0]][@current_player.origin[1]]
+            @selected_piece = @board.board[@current_player.origin[0]][@current_player.origin[1]]
         end
     end
 
     def game_loop
         choose_origin
-        check_origin #to be created
+        check_origin 
         choose_destination #to be created
         check_destination #to be created
         move_piece #to be created
