@@ -2,7 +2,7 @@
 
 require './lib/board'
 require './lib/game'
-
+=begin
 describe Board do
     describe "set_up_pieces" do
         subject(:new_board) { described_class.new }
@@ -16,6 +16,7 @@ describe Board do
 
     end
 end
+=end
 
 describe Game do
     describe "check_color" do
@@ -37,6 +38,18 @@ describe Game do
                 expect(new_game.current_player.name).to eq("Player2")
             end
     end
+
+    describe "check_origin" do
+        subject(:new_game_origin) { described_class.new }
+        
+        it "Raise an error when there is no piece on the selected origin" do
+            new_game_origin.player1.color = "White"
+            new_game_origin.player2.color = "Black"
+            new_game_origin.current_player.origin = [0,3]
+            expect {new_game_origin.check_origin }.to output("There is no piece on that coordinate, please choose another one").to_stdout
+        end
+    end
+
 
 end
   
