@@ -17,14 +17,20 @@ class Game
 
     def play
         puts "welcome"
-        2.times do
-            create_players
-        end
-        puts "\nLet's the game begins!"
+        create_players
+        start_animation
         @board = Board.new
         choose_origin
         check_origin
         puts "end"
+    end
+
+    def start_animation
+        str = "Let's the game BEGINS!"
+        str.split(" ").each do |word|
+            puts "\n#{word}"
+            sleep(1)
+        end
     end
 
     def choose_origin #Gets only valid letter + number, store it as an array in @current_player.origin, raise an error if invalid
@@ -42,12 +48,17 @@ class Game
             end
     end
 
-    def create_players #This will be looped 2 times
-        puts "#{@current_player.name}, what is your name?"
-        @current_player.name = gets.chomp
-        puts "Hello #{@current_player.name}, now choose with which color you play ('W' for whites, 'B' for blacks)"
-        check_color
-        change_current_player
+    def create_players 
+            puts "\n#{@current_player.name}, what is your name?"
+            @current_player.name = gets.chomp
+            puts "\nHello #{@current_player.name}, now choose with which color you play ('W' for whites, 'B' for blacks)"
+            check_color
+            change_current_player
+            puts "\n#{@current_player.name}, what is your name?"
+            @current_player.name = gets.chomp
+            @player1.color == "White" ? @current_player.color = "Black" : @current_player.color = "White"
+            puts "\n#{@current_player.name} you will play #{@current_player.color}"
+            sleep(1)
     end
 
     def check_color #Check for valid input and store the color, raise an error if invalid
