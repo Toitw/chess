@@ -11,7 +11,7 @@ class Game
 
     attr_reader :board, :current_player, :player1, :player2, :selected_piece
     def initialize
-        @board = nil
+        @board = Board.new
         @player1 = Player.new("Player1")
         @player2 = Player.new("Player2")
         @current_player = @player1
@@ -22,7 +22,7 @@ class Game
         puts "welcome"
         create_players
         start_animation
-        @board = Board.new
+        @board.display_board
         choose_origin
         check_origin
         puts "end"

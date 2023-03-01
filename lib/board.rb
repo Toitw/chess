@@ -12,7 +12,6 @@ class Board
   def initialize
     @board = Array.new(8) { Array.new(8, nil) }
     set_up_pieces
-    display_board
   end
 
   def set_up_pieces
