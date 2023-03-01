@@ -51,7 +51,7 @@ class Game
             end
     end
 
-    def create_players 
+    def create_players #check, it doesn't apply the right color
             puts "\n#{@current_player.name}, what is your name?"
             @current_player.name = gets.chomp
             puts "\nHello #{@current_player.name}, now choose with which color you play ('W' for whites, 'B' for blacks)"
@@ -59,7 +59,8 @@ class Game
             change_current_player
             puts "\n#{@current_player.name}, what is your name?"
             @current_player.name = gets.chomp
-            @player1.color == "White" ? @current_player.color = "Black" : @current_player.color = "White"
+            #check, it doesn't apply the right color
+            @player1.color == "white" ? @current_player.color = "black" : @current_player.color = "white"
             puts "\n#{@current_player.name} you will play #{@current_player.color}"
             change_current_player
             sleep(1)
