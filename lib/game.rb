@@ -4,8 +4,11 @@ require_relative "board"
 require_relative "piece"
 require_relative "player"
 require_relative "visual"
+require_relative "chessPieceMoves"
 
 class Game
+    include ChessPieceMoves
+
     attr_reader :board, :current_player, :player1, :player2, :selected_piece
     def initialize
         @board = nil
@@ -93,7 +96,12 @@ class Game
         end
     end
 
-    def get_all_moves(piece)
+    def get_all_moves(piece_type, pos)
+        case piece
+        when :knight
+            moves = KNIGHT_MOVES.map { |column, row| [(pos[0] + column), (pos[1] + row)] }.filter { |column, row| column >= 0 && column <= 8 && row >= 0 && row <= 8 }
+            moves
+        end
     end
 
     def game_loop

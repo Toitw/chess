@@ -26,8 +26,6 @@ describe Game do
     describe "check_origin" do
         subject(:new_game_origin) { described_class.new }
       
-
-      
         before do
           new_game_origin.instance_variable_set(:@board, Board.new)
         end
@@ -65,7 +63,11 @@ describe Game do
         end
 
         context "When a knight on square [1,0] is selected"
-        it "Returns all posible moves [-1,1]"
+        it "Returns moves with values [[0, 2], [2, 2], [3,1]]" do
+            new_game_all_moves.selected_piece.type = :knight
+            new_game_all_moves.current_player.origin = [1,0]
+            expect(get_all_moves(@selected_piece.type, @current_player.origin)).to eq([[0, 2], [2, 2], [3,1]])
+        end
     end
 
 end
