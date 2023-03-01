@@ -11,7 +11,7 @@ class Game
 
     attr_reader :board, :current_player, :player1, :player2, :selected_piece
     def initialize
-        @board = nil
+        @board = Board.new
         @player1 = Player.new("Player1")
         @player2 = Player.new("Player2")
         @current_player = @player1
@@ -22,7 +22,7 @@ class Game
         puts "welcome"
         create_players
         start_animation
-        @board = Board.new
+        @board.display_board
         choose_origin
         check_origin
         puts "end"
@@ -43,7 +43,7 @@ class Game
                 if raw_input[0].match?(/^[a-hA-H]$/) == false || raw_input[1].match?(/^[1-8]$/) == false
                 raise "Invalid input: '#{raw_input}'. Please enter a valid chess coordinate (First a letter a-h, then a number 1-8, e.g. 'e4')"
                 else
-                @current_player.origin = [(raw_input[0].downcase.ord - 97), raw_input[1].to_i]
+                @current_player.origin = [(raw_input[0].downcase.ord - 97), (raw_input[1].to_i)-1]
                 end
                 rescue => e
                     puts e.message
@@ -61,6 +61,7 @@ class Game
             @current_player.name = gets.chomp
             @player1.color == "White" ? @current_player.color = "Black" : @current_player.color = "White"
             puts "\n#{@current_player.name} you will play #{@current_player.color}"
+            change_current_player
             sleep(1)
     end
 
@@ -68,9 +69,9 @@ class Game
         begin
           color = gets.chomp
           if color.match?(/^[wW]$/)
-            @current_player.color = "White"
+            @current_player.color = "white"
           elsif color.match? (/^[bB]$/)
-            @current_player.color= "Black"
+            @current_player.color= "black"
           else
             raise "Please, write only 'B' for blacks or 'W' for whites"
           end
@@ -88,7 +89,7 @@ class Game
         if @board.board[@current_player.origin[0]][@current_player.origin[1]].nil?
             puts "There is no piece on that coordinate, please choose another one"
             choose_origin
-        elsif @board.board[@current_player.origin[0]][@current_player.origin[1]].color != @current_player.color
+        elsif @board.board[@current_player.origin[0]][@current_player.origin[1]].color != @current_player.color.to_sym
             puts "That is not your piece! Please, choose one of your pieces to move"
             choose_origin
         else
