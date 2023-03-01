@@ -22,11 +22,13 @@ class Game
         end
         puts "\nLet's the game begins!"
         @board = Board.new
-        puts "finish"
+        choose_origin
+        check_origin
+        puts "end"
     end
 
     def choose_origin #Gets only valid letter + number, store it as an array in @current_player.origin, raise an error if invalid
-        puts "\n#{@current_player} Please, enter the coordinate of the piece you want to move (First a letter a-h, then a number 1-8, e.g. 'e4')"
+        puts "\n#{@current_player.name} Please, enter the coordinate of the piece you want to move (First a letter a-h, then a number 1-8, e.g. 'e4')"
             begin
                 raw_input = gets.chomp
                 if raw_input[0].match?(/^[a-hA-H]$/) == false || raw_input[1].match?(/^[1-8]$/) == false
@@ -72,14 +74,22 @@ class Game
         if @board.board[@current_player.origin[0]][@current_player.origin[1]].nil?
             puts "There is no piece on that coordinate, please choose another one"
             choose_origin
+        elsif @board.board[@current_player.origin[0]][@current_player.origin[1]].color != @current_player.color
+            puts "That is not your piece! Please, choose one of your pieces to move"
+            choose_origin
         else
             @selected_piece = @board.board[@current_player.origin[0]][@current_player.origin[1]]
         end
     end
 
+    def get_all_moves(piece)
+    end
+
     def game_loop
         choose_origin
         check_origin 
+        get_all_moves #In creation
+        get_available_moves #to be created
         choose_destination #to be created
         check_destination #to be created
         move_piece #to be created

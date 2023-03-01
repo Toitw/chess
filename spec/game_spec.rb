@@ -1,22 +1,6 @@
 # frozen_string_literal: true
 
-require './lib/board'
 require './lib/game'
-=begin
-describe Board do
-    describe "set_up_pieces" do
-        subject(:new_board) { described_class.new }
-
-        context "When the board is initialize it place the white king in position" do
-            it "returns 'king' when accesing position @board[0][4].type" do
-                new_board.set_up_pieces
-                expect(new_board.board[0][4].type).to eq(:king)
-            end
-        end
-
-    end
-end
-=end
 
 describe Game do
     describe "check_color" do
@@ -63,8 +47,26 @@ describe Game do
             expect(new_game_origin.selected_piece.type).to eq(:pawn)
             expect(new_game_origin.selected_piece.color).to eq(:white)
         end
+
+        it "Returns a meesage of incorrect piece" do
+            new_game_origin.player1.color = "White"
+            new_game_origin.player2.color = "Black"
+            new_game_origin.current_player.origin = [0, 7]
+            new_game_origin.check_origin
+            expect { new_game_origin.check_origin }.to output("That is not your piece! Please, choose one of your pieces to move\n").to_stdout
+        end
     end
 
+    describe "get_all_moves" do
+        subject(:new_game_all_moves) { described_class.new }
+
+        before do
+            new_game_origin.instance_variable_set(:@board, Board.new)
+        end
+
+        context "When a knight on square [1,0] is selected"
+        it "Returns all posible moves [-1,1]"
+    end
 
 end
   
