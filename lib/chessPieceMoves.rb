@@ -53,28 +53,28 @@ module ChessPieceMoves
   
       # Right
       x, y = pos
-      until x >= 7
+      until x >= 7 || !@board.board[x+1][y].nil?
         x += 1
         moves << [x, y]
       end
   
       # Up
       x, y = pos
-      until y >= 7
+      until y >= 7 || !@board.board[x][y+1].nil?
         y += 1
         moves << [x, y]
       end
   
       # Left
       x, y = pos
-      until x <= 0
+      until x <= 0 || !@board.board[x-1][y].nil?
         x -= 1
         moves << [x, y]
       end
   
       # Down
       x, y = pos
-      until y <= 0
+      until y <= 0 || !@board.board[x][y-1].nil?
         y -= 1
         moves << [x, y]
       end
@@ -110,10 +110,10 @@ module ChessPieceMoves
   
       if color == :white
         moves << [x, y + 1]
-        moves << [x, y + 2] if y == 1
+        moves << [x, y + 2] if y == 1 && @board.board[x][y+1].nil?
       else
         moves << [x, y - 1]
-        moves << [x, y - 2] if y == 6
+        moves << [x, y - 2] if y == 6 && @board.board[x][y-1].nil?
       end
   
       moves

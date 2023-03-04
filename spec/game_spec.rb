@@ -73,8 +73,8 @@ describe Game do
         end
         
         context "when a bishop on square [3,3] is selected" do
-            it "returns moves with values [[4,4],[5,5],[6,6],[7,7],[4,2],[5,1],[6,0],[2,4],[1,5],[0,6],[2,2],[1,1],[0,0]]" do
-              expect(game.get_all_moves(game.selected_piece.type, game.current_player.origin)).to eq([[4,4],[5,5],[6,6],[7,7],[4,2],[5,1],[6,0],[2,2],[1,1],[0,0],[2,4],[1,5],[0,6]])
+            it "returns moves with values [[4, 4], [5, 5], [4, 2], [2, 2], [2, 4], [1, 5]]" do
+              expect(game.get_all_moves(game.selected_piece.type, game.current_player.origin)).to eq([[4, 4], [5, 5], [4, 2], [2, 2], [2, 4], [1, 5]])
             end
         end
 
@@ -85,7 +85,7 @@ describe Game do
         
             it "returns all possible moves for the rook" do
               game.current_player.origin = [3, 3]
-              expected_moves = [[3, 0], [3, 1], [3, 2], [3, 4], [3, 5], [3, 6], [3, 7], [0, 3], [1, 3], [2, 3], [4, 3], [5, 3], [6, 3], [7, 3]]
+              expected_moves = [[0, 3], [1, 3], [2, 3], [3, 2], [3, 4], [3, 5], [4, 3], [5, 3], [6, 3], [7, 3]]
               expect(game.get_all_moves(game.selected_piece.type, game.current_player.origin)).to match_array(expected_moves)
             end
         end
@@ -97,7 +97,7 @@ describe Game do
         
             it "returns all possible moves for the queen" do
               game.current_player.origin = [3, 3]
-              expected_moves = [[3, 0], [3, 1], [3, 2], [3, 4], [3, 5], [3, 6], [3, 7], [0, 3], [1, 3], [2, 3], [4, 3], [5, 3], [6, 3], [7, 3], [0, 0], [1, 1], [2, 2], [4, 4], [5, 5], [6, 6], [7, 7], [2, 4], [1, 5], [0, 6], [4, 2], [5, 1], [6, 0]]
+              expected_moves = [[4, 4], [5, 5], [4, 2], [2, 2], [2, 4], [1, 5], [0, 3], [1, 3], [2, 3], [3, 2], [3, 4], [3, 5], [4, 3], [5, 3], [6, 3], [7, 3]]
               expect(game.get_all_moves(game.selected_piece.type, game.current_player.origin)).to match_array(expected_moves)
             end
         end
