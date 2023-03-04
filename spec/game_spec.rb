@@ -137,6 +137,17 @@ describe Game do
               expected_moves = [[0,5],[0,4]]
               expect(game.get_all_moves(game.selected_piece.type, game.current_player.origin)).to eq([[0,5],[0,4]])
             end
+
+            before do
+                game.instance_variable_set(:@selected_piece, Piece.new(:pawn, :black))
+            end
+
+            it "returns all possible moves for a black pawn in [0, 6] with a piece in [0, 5]" do
+                game.current_player.origin = [0, 6]
+                game.board.board[0][5] = Piece.new(:knight, :white)
+                expected_moves = [[0, 5]]
+                expect(game.get_all_moves(game.selected_piece.type, game.current_player.origin)).to match_array(expected_moves)
+            end
         end
     end
 
