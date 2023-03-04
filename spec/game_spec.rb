@@ -57,6 +57,7 @@ describe Game do
 
         before do
             game.instance_variable_set(:@board, Board.new)
+            game.instance_variable_set(:@current_player, Player.new("John", :white))
             game.instance_variable_set(:@selected_piece, Piece.new(:knight, :white))
             game.current_player.origin = [1,0]
         end
@@ -67,15 +68,74 @@ describe Game do
         end
 
         before do
-            game.instance_variable_set(:@board, Board.new)
             game.instance_variable_set(:@selected_piece, Piece.new(:bishop, :white))
-            game.instance_variable_set(:@current_player, Player.new("John", :white))
             game.current_player.origin = [3,3]
         end
         
         context "when a bishop on square [3,3] is selected" do
             it "returns moves with values [[4,4],[5,5],[6,6],[7,7],[4,2],[5,1],[6,0],[2,4],[1,5],[0,6],[2,2],[1,1],[0,0]]" do
               expect(game.get_all_moves(game.selected_piece.type, game.current_player.origin)).to eq([[4,4],[5,5],[6,6],[7,7],[4,2],[5,1],[6,0],[2,2],[1,1],[0,0],[2,4],[1,5],[0,6]])
+            end
+        end
+
+        context "when a rook is selected" do
+            before do
+              game.instance_variable_set(:@selected_piece, Piece.new(:rook, :white))
+            end
+        
+            it "returns all possible moves for the rook" do
+              game.current_player.origin = [3, 3]
+              expected_moves = [[3, 0], [3, 1], [3, 2], [3, 4], [3, 5], [3, 6], [3, 7], [0, 3], [1, 3], [2, 3], [4, 3], [5, 3], [6, 3], [7, 3]]
+              expect(game.get_all_moves(game.selected_piece.type, game.current_player.origin)).to match_array(expected_moves)
+            end
+        end
+
+        context "when a queen is selected" do
+            before do
+              game.instance_variable_set(:@selected_piece, Piece.new(:queen, :white))
+            end
+        
+            it "returns all possible moves for the queen" do
+              game.current_player.origin = [3, 3]
+              expected_moves = [[3, 0], [3, 1], [3, 2], [3, 4], [3, 5], [3, 6], [3, 7], [0, 3], [1, 3], [2, 3], [4, 3], [5, 3], [6, 3], [7, 3], [0, 0], [1, 1], [2, 2], [4, 4], [5, 5], [6, 6], [7, 7], [2, 4], [1, 5], [0, 6], [4, 2], [5, 1], [6, 0]]
+              expect(game.get_all_moves(game.selected_piece.type, game.current_player.origin)).to match_array(expected_moves)
+            end
+        end
+
+        context "when a king is selected" do
+            before do
+              game.instance_variable_set(:@selected_piece, Piece.new(:king, :white))
+            end
+        
+            it "returns all possible moves for the king" do
+              game.current_player.origin = [4, 4]
+              expected_moves = [[3, 4], [3, 3], [3, 5], [4, 3], [4, 5], [5, 3], [5, 4], [5, 5]]
+              expect(game.get_all_moves(game.selected_piece.type, game.current_player.origin)).to match_array(expected_moves)
+            end
+        end
+
+        context "when a white pawn is selected" do
+            before do
+              game.instance_variable_set(:@selected_piece, Piece.new(:pawn, :white))
+            end
+        
+            it "returns all possible moves for a white pawn in [0, 1]" do
+              game.current_player.origin = [0, 1]
+              expected_moves = [[0,2],[0,3]]
+              puts "Expected moves: #{expected_moves.inspect}"
+              expect(game.get_all_moves(game.selected_piece.type, game.current_player.origin)).to eq([[0,2],[0,3]])
+            end
+        end
+
+        context "when a black pawn is selected" do
+            before do
+              game.instance_variable_set(:@selected_piece, Piece.new(:pawn, :black))
+            end
+        
+            it "returns all possible moves for a black pawn in [0, 6]" do
+              game.current_player.origin = [0, 6]
+              expected_moves = [[0,5],[0,4]]
+              expect(game.get_all_moves(game.selected_piece.type, game.current_player.origin)).to eq([[0,5],[0,4]])
             end
         end
     end
