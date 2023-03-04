@@ -54,38 +54,49 @@ describe Game do
     end
 
     describe "get_all_moves" do
-        subject(:new_game_all_moves) { described_class.new }
 
         before do
-            new_game_all_moves.instance_variable_set(:@board, Board.new)
-            new_game_all_moves.instance_variable_set(:@selected_piece, Piece.new(:knight, :white))
-            new_game_all_moves.current_player.origin = [1,0]
+            game.instance_variable_set(:@board, Board.new)
+            game.instance_variable_set(:@selected_piece, Piece.new(:knight, :white))
+            game.current_player.origin = [1,0]
         end
 
         context "When a knight on square [1,0] is selected"
         xit "Returns moves with values [[0, 2], [2, 2], [3,1]]" do
-            expect(new_game_all_moves.get_all_moves(new_game_all_moves.selected_piece.type, new_game_all_moves.current_player.origin)).to eq([[0, 2], [2, 2], [3,1]])
+            expect(game.get_all_moves(game.selected_piece.type, game.current_player.origin)).to eq([[0, 2], [2, 2], [3,1]])
+        end
+
+        before do
+            game.instance_variable_set(:@board, Board.new)
+            game.instance_variable_set(:@selected_piece, Piece.new(:bishop, :white))
+            game.instance_variable_set(:@current_player, Player.new("John", :white))
+            game.current_player.origin = [3,3]
+        end
+        
+        context "when a bishop on square [3,3] is selected" do
+            it "returns moves with values [[4,4],[5,5],[6,6],[7,7],[4,2],[5,1],[6,0],[2,4],[1,5],[0,6],[2,2],[1,1],[0,0]]" do
+              expect(game.get_all_moves(game.selected_piece.type, game.current_player.origin)).to eq([[4,4],[5,5],[6,6],[7,7],[4,2],[5,1],[6,0],[2,2],[1,1],[0,0],[2,4],[1,5],[0,6]])
+            end
         end
     end
 
     describe "get_available_moves" do
-        subject(:new_game_available_moves) { described_class.new }
 
         before do
-            new_game_available_moves.instance_variable_set(:@selected_piece, Piece.new(:knight, :white))
-            new_game_available_moves.instance_variable_set(:@current_player, Player.new("test",:white))
+            game.instance_variable_set(:@selected_piece, Piece.new(:knight, :white))
+            game.instance_variable_set(:@current_player, Player.new("test",:white))
         end
 
         context "When a knight on square [1,0] is selected"
         xit "Returns moves with values [[0, 2], [2, 2]]" do
             all_moves = [[0, 2], [2, 2], [3,1]]
-            expect(new_game_available_moves.get_available_moves(new_game_available_moves.selected_piece.type, all_moves)).to eq([[0, 2], [2, 2]])
+            expect(game.get_available_moves(game.selected_piece.type, all_moves)).to eq([[0, 2], [2, 2]])
         end
 
         context "When a knight on square g7 [6, 0] is selected"
         xit "Returns moves with values [[5, 2], [7, 2]]" do
             all_moves = [[5, 2], [7, 2], [4, 1]]
-            expect(new_game_available_moves.get_available_moves(new_game_available_moves.selected_piece.type, all_moves)).to eq([[5, 2], [7, 2]])
+            expect(game.get_available_moves(game.selected_piece.type, all_moves)).to eq([[5, 2], [7, 2]])
         end
     end
 
@@ -137,6 +148,21 @@ describe Game do
                 expect(game.instance_variable_get(:@board).board[2][2]).to eq(game.instance_variable_get(:@selected_piece))
               end
             end
+
+            context "when moving the selected knight to [2, 2] and it eats a piece" do
+                before do
+                  game.instance_variable_get(:@current_player).destination = [2, 2]
+                  game.instance_variable_get(:@current_player).origin = [1, 0]
+                  game.instance_variable_get(:@board).board[2][2] = Piece.new(:knight, :black)
+                end
+          
+                it "moves the knight to [2, 2] on the board" do
+                  game.move_selected_piece
+                  expect(game.instance_variable_get(:@board).board[1][0]).to eq(nil)
+                  expect(game.instance_variable_get(:@board).board[2][2]).to eq(game.instance_variable_get(:@selected_piece))
+                end
+            end
+
         end
 
     end

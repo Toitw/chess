@@ -108,6 +108,8 @@ class Game
         when :knight
             moves = KNIGHT_MOVES.map { |column, row| [(pos[0] + column), (pos[1] + row)] }.filter { |column, row| column >= 1 && column <= 7 && row >= 1 && row <= 7 }
             moves
+        when :bishop
+            bishop_moves(@current_player.origin)
         end
     end
 
