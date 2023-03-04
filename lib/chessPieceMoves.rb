@@ -15,7 +15,7 @@ module ChessPieceMoves
   
       # Upper Right Diagonal
       x, y = pos
-      until x >= 8 || y >= 8
+      until x >= 7 || y >= 7
         x += 1
         y += 1
         moves << [x, y]
@@ -23,7 +23,7 @@ module ChessPieceMoves
   
       # Lower Right Diagonal
       x, y = pos
-      until x >= 8 || y <= 1
+      until x >= 7 || y <= 0
         x += 1
         y -= 1
         moves << [x, y]
@@ -31,7 +31,7 @@ module ChessPieceMoves
   
       # Lower Left Diagonal
       x, y = pos
-      until x <= 1 || y <= 1
+      until x <= 0 || y <= 0
         x -= 1
         y -= 1
         moves << [x, y]
@@ -39,7 +39,7 @@ module ChessPieceMoves
   
       # Upper Left Diagonal
       x, y = pos
-      until x <= 1 || y >= 8
+      until x <= 0 || y >= 7
         x -= 1
         y += 1
         moves << [x, y]
@@ -53,28 +53,28 @@ module ChessPieceMoves
   
       # Right
       x, y = pos
-      until x >= 8
+      until x >= 7
         x += 1
         moves << [x, y]
       end
   
       # Up
       x, y = pos
-      until y >= 8
+      until y >= 7
         y += 1
         moves << [x, y]
       end
   
       # Left
       x, y = pos
-      until x <= 1
+      until x <= 0
         x -= 1
         moves << [x, y]
       end
   
       # Down
       x, y = pos
-      until y <= 1
+      until y <= 0
         y -= 1
         moves << [x, y]
       end
