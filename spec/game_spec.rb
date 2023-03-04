@@ -3,6 +3,7 @@
 require './lib/game'
 
 describe Game do
+    subject(:game) { described_class.new }
     describe "check_color" do
       subject(:new_game) { described_class.new }
   
@@ -96,6 +97,31 @@ describe Game do
 
     end
 
+    describe "move__selected_piece" do
+        # Set up the board with a white knight on [1, 0]
+        before do
+            game.instance_variable_set(:@board, Board.new)
+            game.instance_variable_set(:@selected_piece, Piece.new(:knight, :white))
+            game.instance_variable_set(:@current_player, Player.new("White", :white))
+            game.instance_variable_get(:@board).board[1][0] = game.instance_variable_get(:@selected_piece)
+        end
+
+        describe "#move_selected_piece" do
+            context "when moving the selected knight to [2, 2]" do
+              before do
+                game.instance_variable_get(:@current_player).destination = [2, 2]
+                game.instance_variable_get(:@current_player).origin = [1, 0]
+              end
+        
+              it "moves the knight to [2, 2] on the board" do
+                game.move_selected_piece
+                expect(game.instance_variable_get(:@board).board[1][0]).to eq(nil)
+                expect(game.instance_variable_get(:@board).board[2][2]).to eq(game.instance_variable_get(:@selected_piece))
+              end
+            end
+        end
+
+    end
 
 end
   

@@ -27,6 +27,9 @@ class Game
         choose_origin
         check_origin
         get_available_moves(@selected_piece.type, get_all_moves(@selected_piece.type, @current_player.origin))
+        choose_destination
+        move_selected_piece
+        @board.display_board
         puts "end"
     end
 
@@ -130,6 +133,11 @@ class Game
         end
     end
 
+    def move_selected_piece
+        @board.board[@current_player.destination[0]][@current_player.destination[1]] = @selected_piece
+        @board.board[@current_player.origin[0]][@current_player.origin[1]] = nil
+    end
+
     def game_loop
         choose_origin
         check_origin 
@@ -137,7 +145,7 @@ class Game
         get_available_moves #In creation
         choose_destination 
         check_destination #to be created
-        move_piece #to be created
+        move_selected_piece #to be created
         update_board #to be created
         change_current_player #to be created
     end 
