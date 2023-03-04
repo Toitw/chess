@@ -81,6 +81,12 @@ describe Game do
             all_moves = [[0, 2], [2, 2], [3,1]]
             expect(new_game_available_moves.get_available_moves(new_game_available_moves.selected_piece.type, all_moves)).to eq([[0, 2], [2, 2]])
         end
+
+        context "When a knight on square g7 [6, 0] is selected"
+        it "Returns moves with values [[5, 2], [7, 2]]" do
+            all_moves = [[5, 2], [7, 2], [4, 1]]
+            expect(new_game_available_moves.get_available_moves(new_game_available_moves.selected_piece.type, all_moves)).to eq([[5, 2], [7, 2]])
+        end
     end
 
     describe "choose_destination" do

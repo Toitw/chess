@@ -106,7 +106,7 @@ class Game
     def get_all_moves(piece_type, pos) #Gets all the posible moves inside the board, ignoring pieces
         case piece_type
         when :knight
-            moves = KNIGHT_MOVES.map { |column, row| [(pos[0] + column), (pos[1] + row)] }.filter { |column, row| column >= 0 && column <= 8 && row >= 0 && row <= 8 }
+            moves = KNIGHT_MOVES.map { |column, row| [(pos[0] + column), (pos[1] + row)] }.filter { |column, row| column >= 1 && column <= 7 && row >= 1 && row <= 7 }
             moves
         end
     end
