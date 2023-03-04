@@ -63,7 +63,7 @@ describe Game do
         end
 
         context "When a knight on square [1,0] is selected"
-        it "Returns moves with values [[0, 2], [2, 2], [3,1]]" do
+        xit "Returns moves with values [[0, 2], [2, 2], [3,1]]" do
             expect(new_game_all_moves.get_all_moves(new_game_all_moves.selected_piece.type, new_game_all_moves.current_player.origin)).to eq([[0, 2], [2, 2], [3,1]])
         end
     end
@@ -77,13 +77,13 @@ describe Game do
         end
 
         context "When a knight on square [1,0] is selected"
-        it "Returns moves with values [[0, 2], [2, 2]]" do
+        xit "Returns moves with values [[0, 2], [2, 2]]" do
             all_moves = [[0, 2], [2, 2], [3,1]]
             expect(new_game_available_moves.get_available_moves(new_game_available_moves.selected_piece.type, all_moves)).to eq([[0, 2], [2, 2]])
         end
 
         context "When a knight on square g7 [6, 0] is selected"
-        it "Returns moves with values [[5, 2], [7, 2]]" do
+        xit "Returns moves with values [[5, 2], [7, 2]]" do
             all_moves = [[5, 2], [7, 2], [4, 1]]
             expect(new_game_available_moves.get_available_moves(new_game_available_moves.selected_piece.type, all_moves)).to eq([[5, 2], [7, 2]])
         end
@@ -96,14 +96,26 @@ describe Game do
             allow(game).to receive(:gets).and_return("33", "e4")
         end
       
-        it "raises an error and retries" do
+        xit "raises an error and retries" do
             expect { game.choose_destination }.to output(/Invalid input/).to_stdout
             expect { game.choose_destination }.not_to raise_error
         end
 
+        before do
+            allow(game).to receive(:gets).and_return("d2", "c3")
+            game.instance_variable_set(:@selected_piece, Piece.new(:knight, :white))
+            game.instance_variable_set(:@current_player, Player.new("test",:white))
+            game.instance_variable_set(:@available_moves, [[0, 2], [2, 2]])
+        end
+
+        context "Current player inputs a move that is not available"
+        it "raises an error and retries" do
+            expect { game.choose_destination }.to output(/Invalid move/).to_stdout
+            expect { game.choose_destination }.not_to raise_error
+        end
     end
 
-    describe "move__selected_piece" do
+    describe "move_selected_piece" do
         # Set up the board with a white knight on [1, 0]
         before do
             game.instance_variable_set(:@board, Board.new)

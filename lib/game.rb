@@ -112,10 +112,9 @@ class Game
     end
 
     def get_available_moves(piece_type, all_moves) #Gets the available legal moves
-        moves = all_moves.select do |column, row|
+        @available_moves = all_moves.select do |column, row|
             @board.board[column][row] == nil || @board.board[column][row].color != @current_player.color.to_sym
         end
-        moves
     end
 
     def choose_destination
@@ -126,6 +125,12 @@ class Game
             raise "Invalid input: '#{raw_input}'. Please enter a valid chess coordinate (First a letter a-h, then a number 1-8, e.g. 'e4')"
             else
             @current_player.destination = [(raw_input[0].downcase.ord - 97), (raw_input[1].to_i)-1]
+                #if input is good, it checks in the available moves. If it is one of them, breaks, if not, send a message
+                if @available_moves.include?(@current_player.destination)
+                    return
+                else
+                    raise "Invalid move. Please choose a valid destination."
+                end
             end
             rescue => e
                 puts e.message
@@ -145,7 +150,7 @@ class Game
         get_available_moves #In creation
         choose_destination 
         check_destination #to be created
-        move_selected_piece #to be created
+        move_selected_piece 
         update_board #to be created
         change_current_player #to be created
     end 
