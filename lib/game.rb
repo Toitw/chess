@@ -19,17 +19,21 @@ class Game
         @available_moves = nil
     end
 
+    def display_board
+        @board.display_board
+    end
+
     def play
         puts "welcome"
         create_players
         start_animation
-        @board.display_board
+        display_board
         choose_origin
         check_origin
         get_available_moves(@selected_piece.type, get_all_moves(@selected_piece.type, @current_player.origin))
         choose_destination
         move_selected_piece
-        @board.display_board
+        display_board
         puts "end"
     end
 
@@ -120,7 +124,7 @@ class Game
             pawn_moves(pos, @selected_piece.color)
         end
     end
-
+    #TO BE DONE: Add an option when #get_all_moves returns []
     def get_available_moves(piece_type, all_moves) #Gets the available legal moves
         @available_moves = all_moves.select do |column, row|
             @board.board[column][row] == nil || @board.board[column][row].color != @current_player.color.to_sym
@@ -154,15 +158,17 @@ class Game
     end
 
     def game_loop
+        display_board
         choose_origin
         check_origin 
-        get_all_moves #In creation
-        get_available_moves #In creation
+        get_all_moves
+        get_available_moves #In creation//TO BE DONE: Add an option when #get_all_moves returns []
         choose_destination 
-        check_destination #to be created
-        move_selected_piece 
-        update_board #to be created
-        change_current_player #to be created
+        #check_destination #to be created
+        move_selected_piece
+        display_board
+        #update_board #to be created
+        change_current_player 
     end 
       
 
