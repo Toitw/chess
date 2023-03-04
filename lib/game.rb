@@ -115,12 +115,27 @@ class Game
         moves
     end
 
+    def choose_destination
+        puts "\n#{@current_player.name} Please, enter the coordinate where you want to move the selected piece (First a letter a-h, then a number 1-8, e.g. 'e4')"
+        begin
+            raw_input = gets.chomp
+            if raw_input[0].match?(/^[a-hA-H]$/) == false || raw_input[1].match?(/^[1-8]$/) == false
+            raise "Invalid input: '#{raw_input}'. Please enter a valid chess coordinate (First a letter a-h, then a number 1-8, e.g. 'e4')"
+            else
+            @current_player.destination = [(raw_input[0].downcase.ord - 97), (raw_input[1].to_i)-1]
+            end
+            rescue => e
+                puts e.message
+            retry
+        end
+    end
+
     def game_loop
         choose_origin
         check_origin 
         get_all_moves #In creation
-        get_available_moves #to be created
-        choose_destination #to be created
+        get_available_moves #In creation
+        choose_destination 
         check_destination #to be created
         move_piece #to be created
         update_board #to be created

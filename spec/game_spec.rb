@@ -82,5 +82,20 @@ describe Game do
         end
     end
 
+    describe "choose_destination" do
+        subject(:game) { described_class.new }
+
+        before do
+            allow(game).to receive(:gets).and_return("33", "e4")
+        end
+      
+        it "raises an error and retries" do
+            expect { game.choose_destination }.to output(/Invalid input/).to_stdout
+            expect { game.choose_destination }.not_to raise_error
+        end
+
+    end
+
+
 end
   
