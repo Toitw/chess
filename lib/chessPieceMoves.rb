@@ -15,7 +15,7 @@ module ChessPieceMoves
   
       # Upper Right Diagonal
       x, y = pos
-      until x >= 7 || y >= 7
+      until x >= 7 || y >= 7 || !@board.board[x+1][y+1].nil?
         x += 1
         y += 1
         moves << [x, y]
@@ -23,7 +23,7 @@ module ChessPieceMoves
   
       # Lower Right Diagonal
       x, y = pos
-      until x >= 7 || y <= 0
+      until x >= 7 || y <= 0 || !@board.board[x+1][y-1].nil?
         x += 1
         y -= 1
         moves << [x, y]
@@ -31,7 +31,7 @@ module ChessPieceMoves
   
       # Lower Left Diagonal
       x, y = pos
-      until x <= 0 || y <= 0
+      until x <= 0 || y <= 0 || !@board.board[x-1][y-1].nil?
         x -= 1
         y -= 1
         moves << [x, y]
@@ -39,7 +39,7 @@ module ChessPieceMoves
   
       # Upper Left Diagonal
       x, y = pos
-      until x <= 0 || y >= 7
+      until x <= 0 || y >= 7 || !@board.board[x-1][y+1].nil?
         x -= 1
         y += 1
         moves << [x, y]
