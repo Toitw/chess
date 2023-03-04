@@ -27,14 +27,9 @@ class Game
         puts "welcome"
         create_players
         start_animation
-        display_board
-        choose_origin
-        check_origin
-        get_available_moves(@selected_piece.type, get_all_moves(@selected_piece.type, @current_player.origin))
-        choose_destination
-        move_selected_piece
-        display_board
-        puts "end"
+        loop do
+            game_loop
+        end
     end
 
     def start_animation
@@ -161,8 +156,7 @@ class Game
         display_board
         choose_origin
         check_origin 
-        get_all_moves
-        get_available_moves #In creation//TO BE DONE: Add an option when #get_all_moves returns []
+        get_available_moves(@selected_piece.type, get_all_moves(@selected_piece.type, @current_player.origin)) #In creation//TO BE DONE: Add an option when #get_all_moves returns []
         choose_destination 
         #check_destination #to be created
         move_selected_piece
