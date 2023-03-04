@@ -9,13 +9,14 @@ require_relative "chessPieceMoves"
 class Game
     include ChessPieceMoves
 
-    attr_reader :board, :current_player, :player1, :player2, :selected_piece
+    attr_reader :board, :current_player, :player1, :player2, :selected_piece, :available_moves
     def initialize
         @board = Board.new
         @player1 = Player.new("Player1")
         @player2 = Player.new("Player2")
         @current_player = @player1
         @selected_piece = nil
+        @available_moves = nil
     end
 
     def play
@@ -25,6 +26,7 @@ class Game
         @board.display_board
         choose_origin
         check_origin
+        get_available_moves(@selected_piece.type, get_all_moves(@selected_piece.type, @current_player.origin))
         puts "end"
     end
 
@@ -98,12 +100,19 @@ class Game
         end
     end
 
-    def get_all_moves(piece_type, pos)
-        case piece
+    def get_all_moves(piece_type, pos) #Gets all the posible moves inside the board, ignoring pieces
+        case piece_type
         when :knight
             moves = KNIGHT_MOVES.map { |column, row| [(pos[0] + column), (pos[1] + row)] }.filter { |column, row| column >= 0 && column <= 8 && row >= 0 && row <= 8 }
             moves
         end
+    end
+
+    def get_available_moves(piece_type, all_moves) #Gets the available legal moves
+        moves = all_moves.select do |column, row|
+            @board.board[column][row] == nil || @board.board[column][row].color != @current_player.color.to_sym
+        end
+        moves
     end
 
     def game_loop
