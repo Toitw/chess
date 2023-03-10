@@ -322,6 +322,12 @@ describe Game do
         game.board.board[4][1] = Piece.new(:pawn, :black)
         expect(game.in_check?([4, 0])).to eq(false)
       end
+
+      context "Checking for checks by a vertical or lateral move"
+      it "Returns true when a queen checks a king on left lateral" do
+        game.board.board[0][4] = Piece.new(:queen, :black)
+        expect(game.in_check?([3, 4])).to eq(true)
+      end
     end
 
 end
