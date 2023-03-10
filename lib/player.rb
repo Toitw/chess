@@ -7,6 +7,6 @@ class Player
     @color = color
     @origin = [] #This will choose the coordinate of the piece that current_player wants to move
     @destination = [] #This will choose the coordinate of the square that current_player wants to move the selected piece
-    @king_checked = false #When the king is threated by a opponent piece
   end
+
 end

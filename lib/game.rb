@@ -152,18 +152,42 @@ class Game
         @board.board[@current_player.origin[0]][@current_player.origin[1]] = nil
     end
 
+    def in_check?(king_position)
+        #Check for knight attacks
+        KNIGHT_MOVES.each do |column, row|
+            x, y = king_position[0] + column, king_position[1] + row
+            next unless (0..7).include?(x) && (0..7).include?(y)
+            next if @board.board[x][y].nil?
+            piece = @board.board[x][y].type
+            return true if piece == :knight
+        end
+        false
+    end
+
+    def king_position #returns an array with the coordinates of current_player king
+        king_position = []
+        @board.board.each_with_index do |row, i|
+            row.each_with_index do |piece, j|
+            next if piece.nil?
+            if piece.type == :king && piece.color == @current_player.color
+                king_position << [i, j]
+            end
+            end
+        end
+        king_position.flatten
+    end
+
     def game_loop
         display_board
         choose_origin
         check_origin 
         get_available_moves(@selected_piece.type, get_all_moves(@selected_piece.type, @current_player.origin)) #In creation//TO BE DONE: Add an option when #get_all_moves returns []
         choose_destination 
-        #check_destination #to be created
+        #check_king #to be created
         move_selected_piece
         display_board
         #update_board #to be created
         change_current_player 
     end 
       
-
 end

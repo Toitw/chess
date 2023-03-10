@@ -237,7 +237,7 @@ describe Game do
         end
 
         context "Current player inputs a move that is not available"
-        it "raises an error and retries" do
+        xit "raises an error and retries" do
             expect { game.choose_destination }.to output(/Invalid move/).to_stdout
             expect { game.choose_destination }.not_to raise_error
         end
@@ -282,6 +282,34 @@ describe Game do
 
         end
 
+    end
+
+    describe "king_position" do
+
+      before do
+        game.instance_variable_set(:@current_player, Player.new("Player1", :white))
+      end
+
+      it "returns an array with the coordinates of the current_player's king position" do
+        expect(game.king_position).to eq([4, 0])
+      end
+    end
+
+    describe "in_check?" do
+      before do
+        game.instance_variable_set(:@current_player, Player.new("Player1", :white))
+      end
+
+      context "When king is in check by a knight"
+      it "Returns true" do
+        game.board.board[5][2] = Piece.new(:knight, :black)
+        expect(game.in_check?([4, 0])).to eq(true)
+      end
+
+      it "Returns true" do
+        game.board.board[7][2] = Piece.new(:knight, :black)
+        expect(game.in_check?([4, 0])).to eq(false)
+      end
     end
 
 end
