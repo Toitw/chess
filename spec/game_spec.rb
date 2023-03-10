@@ -62,7 +62,7 @@ describe Game do
             game.current_player.origin = [1,0]
         end
 
-        context "When a knight on square [1,0] is selected"
+        context "When a knight on square [1,0] is selected at initial positions"
         xit "Returns moves with values [[0, 2], [2, 2], [3,1]]" do
             expect(game.get_all_moves(game.selected_piece.type, game.current_player.origin)).to eq([[0, 2], [2, 2], [3,1]])
         end
@@ -72,33 +72,69 @@ describe Game do
             game.current_player.origin = [3,3]
         end
         
-        context "when a bishop on square [3,3] is selected" do
+        context "when a bishop on square [3,3] is selected at initial positions" do
             it "returns moves with all posible moves" do
               expected_moves = [[4, 4], [5, 5], [4, 2], [2, 2], [2, 4], [1, 5], [6, 6], [0, 6]]
               expect(game.get_all_moves(game.selected_piece.type, game.current_player.origin)).to match_array(expected_moves)
             end
         end
 
-        context "when a rook is selected" do
+        context "when a bishop on square [0, 2] is selected at initial positions" do
+          it "returns moves with all posible moves" do
+            game.current_player.origin = [0, 2]
+            expected_moves = [[1, 3], [2, 4], [3, 5], [4, 6]]
+            expect(game.get_all_moves(game.selected_piece.type, game.current_player.origin)).to match_array(expected_moves)
+          end
+        end
+
+        context "when a bishop on square [5, 0] is selected at initial positions" do
+          it "returns moves with all posible moves" do
+            game.current_player.origin = [5, 0]
+            expected_moves = []
+            expect(game.get_all_moves(game.selected_piece.type, game.current_player.origin)).to match_array(expected_moves)
+          end
+        end
+
+        context "when a bishop on square [5, 2] is selected at initial positions" do
+          it "returns moves with all posible moves" do
+            game.current_player.origin = [5, 2]
+            expected_moves = [[6,3], [7,4], [1, 6], [2, 5], [3, 4], [4, 3]]
+            expect(game.get_all_moves(game.selected_piece.type, game.current_player.origin)).to match_array(expected_moves)
+          end
+        end
+
+        context "when a rook is selected at initial positions" do
             before do
               game.instance_variable_set(:@selected_piece, Piece.new(:rook, :white))
             end
         
-            it "returns all possible moves for the rook" do
+            it "returns all possible moves for the rook in position [3,3]" do
               game.current_player.origin = [3, 3]
               expected_moves = [[0, 3], [1, 3], [2, 3], [3, 2], [3, 4], [3, 5], [4, 3], [5, 3], [6, 3], [7, 3], [3, 6]]
               expect(game.get_all_moves(game.selected_piece.type, game.current_player.origin)).to match_array(expected_moves)
             end
+
+            it "returns all possible moves for the rook in position [7,0]" do
+              game.current_player.origin = [7, 0]
+              expected_moves = []
+              expect(game.get_all_moves(game.selected_piece.type, game.current_player.origin)).to match_array(expected_moves)
+            end
         end
 
-        context "when a queen is selected" do
+        context "when a queen is selected at initial positions" do
             before do
               game.instance_variable_set(:@selected_piece, Piece.new(:queen, :white))
             end
         
-            it "returns all possible moves for the queen" do
+            it "returns all possible moves for the queen in position [3,3]" do
               game.current_player.origin = [3, 3]
               expected_moves = [[4, 4], [5, 5], [4, 2], [2, 2], [2, 4], [1, 5], [0, 3], [1, 3], [2, 3], [3, 2], [3, 4], [3, 5], [4, 3], [5, 3], [6, 3], [7, 3], [3, 6],  [6, 6], [0, 6]]
+              expect(game.get_all_moves(game.selected_piece.type, game.current_player.origin)).to match_array(expected_moves)
+            end
+
+            it "returns all possible moves for the queen in position [3,0]" do
+              game.current_player.origin = [3, 0]
+              expected_moves = []
               expect(game.get_all_moves(game.selected_piece.type, game.current_player.origin)).to match_array(expected_moves)
             end
         end

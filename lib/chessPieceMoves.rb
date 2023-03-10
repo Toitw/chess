@@ -12,78 +12,91 @@ module ChessPieceMoves
   
     def bishop_moves(pos)
       moves = []
-
+    
       # Upper Right Diagonal
       x, y = pos
-      until x >= 7 || y >= 7 || !@board.board[x+1][y+1].nil? 
-        x += 1
-        y += 1
-        moves << [x, y]
-        if !@board.board[x+1][y+1].nil? #if next square is a piece, then it check its color to check if add it or not and break the loop
+      until x >= 7 || y >= 7 
+        if @board.board[x+1][y+1].nil?
+          x += 1
+          y +=1
+          moves << [x, y]
+        else
           if @board.board[x+1][y+1].color != @current_player.color
-            moves << [x+1, y+1]
+            x += 1
+            y +=1
+            moves << [x, y]
           end
           break
         end
       end
-
+    
       # Lower Right Diagonal
       x, y = pos
-      until x >= 7 || y <= 0 || !@board.board[x+1][y-1].nil?
-        x += 1
-        y -= 1
-        moves << [x, y]
-        if !@board.board[x+1][y-1].nil?
+      until x >= 7 || y <= 0
+        if @board.board[x+1][y-1].nil?
+          x += 1
+          y -= 1
+          moves << [x, y]
+        else
           if @board.board[x+1][y-1].color != @current_player.color
-            moves << [x+1, y-1]
+            x += 1
+            y -= 1
+            moves << [x, y]
           end
           break
         end
       end
-
+    
       # Lower Left Diagonal
       x, y = pos
-      until x <= 0 || y <= 0 || !@board.board[x-1][y-1].nil?
-        x -= 1
-        y -= 1
-        moves << [x, y]
-        if !@board.board[x-1][y-1].nil?
+      until x <= 0 || y <= 0
+        if @board.board[x-1][y-1].nil?
+          x -= 1
+          y -= 1
+          moves << [x, y]
+        else
           if @board.board[x-1][y-1].color != @current_player.color
-            moves << [x-1, y-1]
+            x -= 1
+            y -= 1
+            moves << [x, y]
           end
           break
         end
       end
-
+    
       # Upper Left Diagonal
       x, y = pos
-      until x <= 0 || y >= 7 || !@board.board[x-1][y+1].nil?
-        x -= 1
-        y += 1
-        moves << [x, y]
-        if !@board.board[x-1][y+1].nil?
+      until x <= 0 || y >= 7
+        if @board.board[x-1][y+1].nil?
+          x -= 1
+          y += 1
+          moves << [x, y]
+        else
           if @board.board[x-1][y+1].color != @current_player.color
-            moves << [x-1, y+1]
+            x -= 1
+            y += 1
+            moves << [x, y]
           end
           break
         end
       end
     
       moves
-    end
-    
+    end    
   
     def rook_moves(pos)
       moves = []
     
       # Left
       x, y = pos
-      until x <= 0 || !@board.board[x-1][y].nil?
-        x -= 1
-        moves << [x, y]
-        if !@board.board[x][y].nil?
+      until x <= 0
+        if @board.board[x-1][y].nil?
+          x -= 1
+          moves << [x, y]
+        else
           if @board.board[x-1][y].color != @current_player.color
-            moves << [x-1, y]
+            x -= 1
+            moves << [x, y]
           end
           break
         end
@@ -91,12 +104,14 @@ module ChessPieceMoves
     
       # Right
       x, y = pos
-      until x >= 7 || !@board.board[x+1][y].nil?
-        x += 1
-        moves << [x, y]
-        if !@board.board[x][y].nil?
+      until x >= 7
+        if @board.board[x+1][y].nil?
+          x += 1
+          moves << [x, y]
+        else
           if @board.board[x+1][y].color != @current_player.color
-            moves << [x+1, y]
+            x += 1
+            moves << [x, y]
           end
           break
         end
@@ -104,12 +119,14 @@ module ChessPieceMoves
     
       # Up
       x, y = pos
-      until y >= 7 || !@board.board[x][y+1].nil?
-        y += 1
-        moves << [x, y]
-        if !@board.board[x][y+1].nil?
+      until y >= 7
+        if @board.board[x][y+1].nil?
+          y += 1
+          moves << [x, y]
+        else
           if @board.board[x][y+1].color != @current_player.color
-            moves << [x, y+1]
+            y += 1
+            moves << [x, y]
           end
           break
         end
@@ -117,20 +134,21 @@ module ChessPieceMoves
     
       # Down
       x, y = pos
-      until y <= 0 || !@board.board[x][y-1].nil?
-        y -= 1
-        moves << [x, y]
-        if !@board.board[x][y].nil?
+      until y <= 0
+        if @board.board[x][y-1].nil?
+          y -= 1
+          moves << [x, y]
+        else
           if @board.board[x][y-1].color != @current_player.color
-            moves << [x, y-1]
+            y -= 1
+            moves << [x, y]
           end
           break
         end
       end
     
       moves
-    end
-    
+    end    
   
     def queen_moves(pos)
       bishop_moves(pos) + rook_moves(pos)
