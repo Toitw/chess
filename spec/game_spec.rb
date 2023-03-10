@@ -86,7 +86,7 @@ describe Game do
         
             it "returns all possible moves for the rook" do
               game.current_player.origin = [3, 3]
-              expected_moves = [[0, 3], [1, 3], [2, 3], [3, 2], [3, 4], [3, 5], [4, 3], [5, 3], [6, 3], [7, 3]]
+              expected_moves = [[0, 3], [1, 3], [2, 3], [3, 2], [3, 4], [3, 5], [4, 3], [5, 3], [6, 3], [7, 3], [3, 6]]
               expect(game.get_all_moves(game.selected_piece.type, game.current_player.origin)).to match_array(expected_moves)
             end
         end

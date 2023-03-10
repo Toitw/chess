@@ -75,37 +75,62 @@ module ChessPieceMoves
   
     def rook_moves(pos)
       moves = []
-  
-      # Right
-      x, y = pos
-      until x >= 7 || !@board.board[x+1][y].nil?
-        x += 1
-        moves << [x, y]
-      end
-  
-      # Up
-      x, y = pos
-      until y >= 7 || !@board.board[x][y+1].nil?
-        y += 1
-        moves << [x, y]
-      end
-  
+    
       # Left
       x, y = pos
       until x <= 0 || !@board.board[x-1][y].nil?
         x -= 1
         moves << [x, y]
+        if !@board.board[x][y].nil?
+          if @board.board[x-1][y].color != @current_player.color
+            moves << [x-1, y]
+          end
+          break
+        end
       end
-  
+    
+      # Right
+      x, y = pos
+      until x >= 7 || !@board.board[x+1][y].nil?
+        x += 1
+        moves << [x, y]
+        if !@board.board[x][y].nil?
+          if @board.board[x+1][y].color != @current_player.color
+            moves << [x+1, y]
+          end
+          break
+        end
+      end
+    
+      # Up
+      x, y = pos
+      until y >= 7 || !@board.board[x][y+1].nil?
+        y += 1
+        moves << [x, y]
+        if !@board.board[x][y+1].nil?
+          if @board.board[x][y+1].color != @current_player.color
+            moves << [x, y+1]
+          end
+          break
+        end
+      end
+    
       # Down
       x, y = pos
       until y <= 0 || !@board.board[x][y-1].nil?
         y -= 1
         moves << [x, y]
+        if !@board.board[x][y].nil?
+          if @board.board[x][y-1].color != @current_player.color
+            moves << [x, y-1]
+          end
+          break
+        end
       end
-  
+    
       moves
     end
+    
   
     def queen_moves(pos)
       bishop_moves(pos) + rook_moves(pos)
