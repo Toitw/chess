@@ -161,6 +161,21 @@ class Game
             piece = @board.board[x][y].type
             return true if piece == :knight
         end
+
+        #Check for pawn attacks
+        if @current_player.color == :white
+            black_threats = [[1, 1], [-1, 1]]
+            threat_position = black_threats.map {|pos| [pos[0] + king_position[0],pos[1] + king_position[1]]}
+            threat_position.each do |coord|
+                return true if @board.board[coord[0]][coord[1]].type == :pawn && @board.board[coord[0]][coord[1]].color != @current_player.color
+            end
+        else
+            white_threats = [[-1, -1], [1, -1]]
+            threat_position = white_threats.each {|pos| [pos[0] + king_position[0],pos[1] + king_position[1]]}
+            threat_position.each do |coord|
+                return true if @board.board[coord[0]][coord[1]].type == :pawn && @board.board[coord[0]][coord[1]].color != @current_player.color
+            end
+        end
         false
     end
 

@@ -301,13 +301,25 @@ describe Game do
       end
 
       context "When king is in check by a knight"
-      it "Returns true" do
+      it "Returns true when a knight checks a king" do
         game.board.board[5][2] = Piece.new(:knight, :black)
         expect(game.in_check?([4, 0])).to eq(true)
       end
 
-      it "Returns true" do
+      it "Returns false when a knight doesn't checks a king" do
         game.board.board[7][2] = Piece.new(:knight, :black)
+        expect(game.in_check?([4, 0])).to eq(false)
+      end
+
+      context "When king is in check by a pawn"
+      it "Returns true when a pawn checks a king" do
+        game.board.board[3][1] = Piece.new(:pawn, :black)
+        game.board.board[5][1] = Piece.new(:pawn, :black)
+        expect(game.in_check?([4, 0])).to eq(true)
+      end
+
+      it "Returns false when a pawn doesn't checks a king" do
+        game.board.board[4][1] = Piece.new(:pawn, :black)
         expect(game.in_check?([4, 0])).to eq(false)
       end
     end
