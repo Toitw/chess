@@ -162,6 +162,15 @@ describe Game do
               puts "Expected moves: #{expected_moves.inspect}"
               expect(game.get_all_moves(game.selected_piece.type, game.current_player.origin)).to eq([[0,2],[0,3]])
             end
+
+            it "returns all possible moves for a white pawn in [1, 2] when oponent pieces are in [0 ,3] and [2, 3]" do
+              game.current_player.origin = [1, 2]
+              game.board.board[0][3] = Piece.new(:pawn, :black)
+              game.board.board[2][3] = Piece.new(:pawn, :black)
+              expected_moves = [[1,3],[0,3],[2,3]]
+              puts "Expected moves: #{expected_moves.inspect}"
+              expect(game.get_all_moves(game.selected_piece.type, game.current_player.origin)).to match_array(expected_moves)
+            end
         end
 
         context "when a black pawn is selected" do

@@ -175,13 +175,17 @@ module ChessPieceMoves
       moves = []
   
       x, y = pos
-  
+      
       if color == :white
         moves << [x, y + 1]
         moves << [x, y + 2] if y == 1 && @board.board[x][y+1].nil?
+        moves << [x + 1, y + 1] if !@board.board[x + 1][y + 1].nil? && @board.board[x + 1][y + 1].color == :black
+        moves << [x - 1, y + 1] if !@board.board[x - 1][y + 1].nil? && @board.board[x - 1][y + 1].color == :black
       else
         moves << [x, y - 1]
         moves << [x, y - 2] if y == 6 && @board.board[x][y-1].nil?
+        moves << [x + 1, y - 1] if !@board.board[x + 1][y - 1].nil? && @board.board[x + 1][y - 1].color == :white
+        moves << [x - 1, y - 1] if !@board.board[x - 1][y - 1].nil? && @board.board[x - 1][y - 1].color == :white
       end
   
       moves
