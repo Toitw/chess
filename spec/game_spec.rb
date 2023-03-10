@@ -73,8 +73,9 @@ describe Game do
         end
         
         context "when a bishop on square [3,3] is selected" do
-            it "returns moves with values [[4, 4], [5, 5], [4, 2], [2, 2], [2, 4], [1, 5]]" do
-              expect(game.get_all_moves(game.selected_piece.type, game.current_player.origin)).to eq([[4, 4], [5, 5], [4, 2], [2, 2], [2, 4], [1, 5]])
+            it "returns moves with all posible moves" do
+              expected_moves = [[4, 4], [5, 5], [4, 2], [2, 2], [2, 4], [1, 5], [6, 6], [0, 6]]
+              expect(game.get_all_moves(game.selected_piece.type, game.current_player.origin)).to match_array(expected_moves)
             end
         end
 

@@ -12,41 +12,66 @@ module ChessPieceMoves
   
     def bishop_moves(pos)
       moves = []
-  
+
       # Upper Right Diagonal
       x, y = pos
-      until x >= 7 || y >= 7 || !@board.board[x+1][y+1].nil?
+      until x >= 7 || y >= 7 || !@board.board[x+1][y+1].nil? 
         x += 1
         y += 1
         moves << [x, y]
+        if !@board.board[x+1][y+1].nil? #if next square is a piece, then it check its color to check if add it or not and break the loop
+          if @board.board[x+1][y+1].color != @current_player.color
+            moves << [x+1, y+1]
+          end
+          break
+        end
       end
-  
+
       # Lower Right Diagonal
       x, y = pos
       until x >= 7 || y <= 0 || !@board.board[x+1][y-1].nil?
         x += 1
         y -= 1
         moves << [x, y]
+        if !@board.board[x+1][y-1].nil?
+          if @board.board[x+1][y-1].color != @current_player.color
+            moves << [x+1, y-1]
+          end
+          break
+        end
       end
-  
+
       # Lower Left Diagonal
       x, y = pos
       until x <= 0 || y <= 0 || !@board.board[x-1][y-1].nil?
         x -= 1
         y -= 1
         moves << [x, y]
+        if !@board.board[x-1][y-1].nil?
+          if @board.board[x-1][y-1].color != @current_player.color
+            moves << [x-1, y-1]
+          end
+          break
+        end
       end
-  
+
       # Upper Left Diagonal
       x, y = pos
       until x <= 0 || y >= 7 || !@board.board[x-1][y+1].nil?
         x -= 1
         y += 1
         moves << [x, y]
+        if !@board.board[x-1][y+1].nil?
+          if @board.board[x-1][y+1].color != @current_player.color
+            moves << [x-1, y+1]
+          end
+          break
+        end
       end
-  
+    
       moves
     end
+    
   
     def rook_moves(pos)
       moves = []
