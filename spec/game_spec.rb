@@ -98,7 +98,7 @@ describe Game do
         
             it "returns all possible moves for the queen" do
               game.current_player.origin = [3, 3]
-              expected_moves = [[4, 4], [5, 5], [4, 2], [2, 2], [2, 4], [1, 5], [0, 3], [1, 3], [2, 3], [3, 2], [3, 4], [3, 5], [4, 3], [5, 3], [6, 3], [7, 3]]
+              expected_moves = [[4, 4], [5, 5], [4, 2], [2, 2], [2, 4], [1, 5], [0, 3], [1, 3], [2, 3], [3, 2], [3, 4], [3, 5], [4, 3], [5, 3], [6, 3], [7, 3], [3, 6],  [6, 6], [0, 6]]
               expect(game.get_all_moves(game.selected_piece.type, game.current_player.origin)).to match_array(expected_moves)
             end
         end
