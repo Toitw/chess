@@ -153,34 +153,7 @@ class Game
     end
 
     def in_check?(king_position)
-        #Check for knight attacks
-        KNIGHT_MOVES.each do |column, row|
-            x, y = king_position[0] + column, king_position[1] + row
-            next unless (0..7).include?(x) && (0..7).include?(y)
-            next if @board.board[x][y].nil?
-            piece = @board.board[x][y].type
-            return true if piece == :knight
-        end
-
-        #Check for pawn attacks
-        if @current_player.color == :white
-            black_threats = [[1, 1], [-1, 1]]
-            threat_position = black_threats.map {|pos| [pos[0] + king_position[0],pos[1] + king_position[1]]}
-            threat_position.each do |coord|
-                return true if @board.board[coord[0]][coord[1]].type == :pawn && @board.board[coord[0]][coord[1]].color != @current_player.color
-            end
-        else
-            white_threats = [[-1, -1], [1, -1]]
-            threat_position = white_threats.each {|pos| [pos[0] + king_position[0],pos[1] + king_position[1]]}
-            threat_position.each do |coord|
-                return true if @board.board[coord[0]][coord[1]].type == :pawn && @board.board[coord[0]][coord[1]].color != @current_player.color
-            end
-        end
-
-        #check for vertical and lateral attacks
-        check_vertical_lateral_attacks
-
-        false
+        check_knight_attacks(king_position) || check_pawn_attacks(king_position) || check_vertical_lateral_attacks(king_position) ? true : false
     end
 
     def king_position #returns an array with the coordinates of current_player king
@@ -196,41 +169,77 @@ class Game
         king_position.flatten
     end
 
-    def check_vertical_lateral_attacks
-        x, y = pos
+    def check_vertical_lateral_attacks(king_position)
         vert_lat_moves = []
         #right lateral
+        x, y = king_position[0], king_position[1]
         until x >= 7 || !@board.board[x][y].nil?
             x += 1
-            if !@board.board[x + 1][y].nil?
-                vert_lat_moves << [x + 1, y]
-            end
         end
+        vert_lat_moves << [x, y]
+
         #left lateral
+        x, y = king_position[0], king_position[1]
         until x <= 0 || !@board.board[x][y].nil?
             x -= 1
-            if !@board.board[x - 1][y].nil?
-                vert_lat_moves << [x - 1, y]
-            end
         end
+        vert_lat_moves << [x, y]
+
         #up vertical
+        x, y = king_position[0], king_position[1]
         until y >= 7 || !@board.board[x][y].nil?
             y += 1
-            if !@board.board[x][y + 1].nil?
-                vert_lat_moves << [x, y + 1]
-            end
         end
+        vert_lat_moves << [x, y]
+
         #down vertical
+        x, y = king_position[0], king_position[1]
         until y <= 0 || !@board.board[x][y].nil?
             y -= 1
-            if !@board.board[x][y - 1].nil?
-                vert_lat_moves << [x, y - 1]
+        end
+        vert_lat_moves << [x, y]
+
+        vert_lat_moves.each do |coord|
+            next if @board.board[coord[0]][coord[1]].nil?
+            return true if @board.board[coord[0]][coord[1]].type == :queen ||  @board.board[coord[0]][coord[1]].type == :rook && @board.board[coord[0]][coord[1]].color != @current_player.color
+        end
+
+        false
+    end
+
+    def check_knight_attacks(king_position)
+        KNIGHT_MOVES.each do |column, row|
+            x, y = king_position[0] + column, king_position[1] + row
+            next unless (0..7).include?(x) && (0..7).include?(y)
+            next if @board.board[x][y].nil?
+            piece = @board.board[x][y].type
+            return true if piece == :knight
+        end
+
+        false
+    end
+
+    def check_pawn_attacks(king_position)
+        if @current_player.color == :white
+            black_threats = [[1, 1], [-1, 1]]
+            threat_position = black_threats.map {|pos| [pos[0] + king_position[0],pos[1] + king_position[1]]}
+            threat_position.each do |coord|
+                next if @board.board[coord[0]][coord[1]].nil?
+                return true if @board.board[coord[0]][coord[1]].type == :pawn && @board.board[coord[0]][coord[1]].color != @current_player.color
+            end
+        else
+            white_threats = [[-1, -1], [1, -1]]
+            threat_position = white_threats.each {|pos| [pos[0] + king_position[0],pos[1] + king_position[1]]}
+            threat_position.each do |coord|
+                next if @board.board[coord[0]][coord[1]].nil?
+                return true if @board.board[coord[0]][coord[1]].type == :pawn && @board.board[coord[0]][coord[1]].color != @current_player.color
             end
         end
 
-        vert_lat_moves.each do |coord|
-            return true if @board.board[coord[0]][coord[1]].type == :queen ||  @board.board[coord[0]][coord[1]].type == :rook && @board.board[coord[0]][coord[1]].color != @current_player.color
-        end
+        false
+    end
+
+    def check_diagonal_attacks(king_position)
     end
 
     def game_loop

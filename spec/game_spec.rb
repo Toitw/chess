@@ -295,6 +295,7 @@ describe Game do
       end
     end
 
+    
     describe "in_check?" do
       before do
         game.instance_variable_set(:@current_player, Player.new("Player1", :white))
@@ -324,10 +325,30 @@ describe Game do
       end
 
       context "Checking for checks by a vertical or lateral move"
-      it "Returns true when a queen checks a king on left lateral" do
-        game.board.board[0][4] = Piece.new(:queen, :black)
+      it "Returns true when a queen checks a king on right lateral" do
+        game.board.board[7][4] = Piece.new(:queen, :black)
         expect(game.in_check?([3, 4])).to eq(true)
       end
+
+      it "Returns true when a rook checks a king on left lateral" do
+        game.board.board[0][4] = Piece.new(:rook, :black)
+        expect(game.in_check?([3, 4])).to eq(true)
+      end
+
+      it "Returns true when a rook checks a king on top vertical" do
+        game.board.board[3][5] = Piece.new(:rook, :black)
+        expect(game.in_check?([3, 4])).to eq(true)
+      end
+
+      it "Returns true when a queen checks a king on down vertical" do
+        game.board.board[3][1] = Piece.new(:queen, :black)
+        expect(game.in_check?([3, 4])).to eq(true)
+      end
+
+      it "Returns false when no queen or rook checks the king" do
+        expect(game.in_check?([3, 4])).to eq(false)
+      end
+
     end
 
 end
