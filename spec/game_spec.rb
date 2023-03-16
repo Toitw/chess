@@ -372,6 +372,22 @@ describe Game do
           expect(game.check_diagonal_attacks(king_position)).to be false
         end
       end
+
+      context 'when there is a king attack' do
+        it 'returns true' do
+          game.board.board[4][3] = Piece.new(:king, :black) # Place a black king on the board
+          king_position = [4, 4]
+          expect(game.check_king_attacks(king_position)).to be true
+        end
+      end
+      
+      context 'when there is no king attack due to distance' do
+        it 'returns false' do
+          game.board.board[4][2] = Piece.new(:king, :black) # Place a black king on the board
+          king_position = [4, 4]
+          expect(game.check_king_attacks(king_position)).to be false
+        end
+      end
       
     end
 

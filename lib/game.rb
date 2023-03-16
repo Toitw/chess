@@ -153,7 +153,7 @@ class Game
     end
 
     def in_check?(king_position)
-        check_knight_attacks(king_position) || check_pawn_attacks(king_position) || check_vertical_lateral_attacks(king_position) || check_diagonal_attacks(king_position) ? true : false
+        check_knight_attacks(king_position) || check_pawn_attacks(king_position) || check_vertical_lateral_attacks(king_position) || check_diagonal_attacks(king_position) || check_king_attacks(king_position) ? true : false
     end
 
     def king_position #returns an array with the coordinates of current_player king
@@ -281,6 +281,31 @@ class Game
       
         false
       end
+
+      def check_king_attacks(king_position)
+        king_moves = [
+          [-1,  1], [0,  1], [1,  1],
+          [-1,  0],           [1,  0],
+          [-1, -1], [0, -1], [1, -1]
+        ]
+      
+        king_moves.each do |move|
+          x, y = king_position[0] + move[0], king_position[1] + move[1]
+      
+          # Skip if the position is outside the board
+          next if x < 0 || x > 7 || y < 0 || y > 7
+      
+          piece = @board.board[x][y]
+          next if piece.nil?
+      
+          if piece.type == :king && piece.color != @current_player.color
+            return true
+          end
+        end
+      
+        false
+      end
+      
       
 
     def game_loop
