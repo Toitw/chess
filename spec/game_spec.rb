@@ -386,7 +386,24 @@ describe Game do
           king_position = [4, 4]
           expect(game.check_king_attacks(king_position)).to be false
         end
-      end      
+      end     
+      
+      context 'when the black king moves to [3, 4]' do
+        it 'is not in check' do
+          game.board.board[4][5] = Piece.new(:king, :black) # Place a black king on the board
+          game.board.board[4][4] = Piece.new(:pawn, :white) # Place a white pawn on the board
+          game.board.board[7][4] = Piece.new(:queen, :white) # Place a white queen on the board
+      
+          # Move the black king to the position [3, 4]
+          game.board.board[3][4] = game.board.board[4][5]
+          game.board.board[4][5] = nil
+      
+          king_position = [3, 4]
+          game.current_player.color.to_sym == :black
+          expect(game.in_check?(king_position)).to be false
+        end
+      end
+      
       
     end
 
