@@ -153,7 +153,7 @@ class Game
     end
 
     def in_check?(king_position)
-        check_knight_attacks(king_position) || check_pawn_attacks(king_position) || check_vertical_lateral_attacks(king_position) ? true : false
+        check_knight_attacks(king_position) || check_pawn_attacks(king_position) || check_vertical_lateral_attacks(king_position) || check_diagonal_attacks(king_position) ? true : false
     end
 
     def king_position #returns an array with the coordinates of current_player king
@@ -240,7 +240,48 @@ class Game
     end
 
     def check_diagonal_attacks(king_position)
-    end
+        diagonal_moves = []
+        
+        # Top-right diagonal
+        x, y = king_position[0], king_position[1]
+        until x >= 7 || y >= 7 || !@board.board[x][y].nil?
+          x += 1
+          y += 1
+        end
+        diagonal_moves << [x, y]
+      
+        # Top-left diagonal
+        x, y = king_position[0], king_position[1]
+        until x <= 0 || y >= 7 || !@board.board[x][y].nil?
+          x -= 1
+          y += 1
+        end
+        diagonal_moves << [x, y]
+      
+        # Bottom-left diagonal
+        x, y = king_position[0], king_position[1]
+        until x <= 0 || y <= 0 || !@board.board[x][y].nil?
+          x -= 1
+          y -= 1
+        end
+        diagonal_moves << [x, y]
+      
+        # Bottom-right diagonal
+        x, y = king_position[0], king_position[1]
+        until x >= 7 || y <= 0 || !@board.board[x][y].nil?
+          x += 1
+          y -= 1
+        end
+        diagonal_moves << [x, y]
+      
+        diagonal_moves.each do |coord|
+          next if @board.board[coord[0]][coord[1]].nil?
+          return true if @board.board[coord[0]][coord[1]].type == :queen || @board.board[coord[0]][coord[1]].type == :bishop && @board.board[coord[0]][coord[1]].color != @current_player.color
+        end
+      
+        false
+      end
+      
 
     def game_loop
         display_board

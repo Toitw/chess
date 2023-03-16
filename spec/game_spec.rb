@@ -349,6 +349,30 @@ describe Game do
         expect(game.in_check?([3, 4])).to eq(false)
       end
 
+      context 'when there is a diagonal attack' do
+        it 'returns true' do
+          game.board.board[3][5] = Piece.new(:bishop, :black) # Replace with your method to set a piece on the board
+          king_position = [4, 4]
+          expect(game.check_diagonal_attacks(king_position)).to be true
+        end
+      end
+
+      context 'when there is a diagonal attack by a queen' do
+        it 'returns true' do
+          game.board.board[2][6] = Piece.new(:queen, :black) # Place a black queen on the board
+          king_position = [4, 4]
+          expect(game.check_diagonal_attacks(king_position)).to be true
+        end
+      end
+      
+      context 'when there is no attack because the attacking piece is the same color' do
+        it 'returns false' do
+          game.board.board[3][5] = Piece.new(:bishop, :white) # Place a white bishop on the board
+          king_position = [4, 4]
+          expect(game.check_diagonal_attacks(king_position)).to be false
+        end
+      end
+      
     end
 
 end
