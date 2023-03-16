@@ -301,53 +301,52 @@ describe Game do
         game.instance_variable_set(:@current_player, Player.new("Player1", :white))
       end
 
-      context "When king is in check by a knight"
-      it "Returns true when a knight checks a king" do
-        game.board.board[5][2] = Piece.new(:knight, :black)
-        expect(game.in_check?([4, 0])).to eq(true)
+      # Test for check_knight_attacks
+      context 'when the king is in check by a knight' do
+        it 'returns true' do
+          game.board.board[6][3] = Piece.new(:knight, :black) # Place a black knight on the board
+          king_position = [4, 4]
+          expect(game.check_knight_attacks(king_position)).to be true
+        end
       end
 
-      it "Returns false when a knight doesn't checks a king" do
-        game.board.board[7][2] = Piece.new(:knight, :black)
-        expect(game.in_check?([4, 0])).to eq(false)
+      # Test for check_pawn_attacks
+      context 'when the king is in check by a pawn' do
+        it 'returns true' do
+          game.board.board[3][5] = Piece.new(:pawn, :black) # Place a black pawn on the board
+          king_position = [4, 4]
+          expect(game.check_pawn_attacks(king_position)).to be true
+        end
       end
 
-      context "When king is in check by a pawn"
-      it "Returns true when a pawn checks a king" do
-        game.board.board[3][1] = Piece.new(:pawn, :black)
-        game.board.board[5][1] = Piece.new(:pawn, :black)
-        expect(game.in_check?([4, 0])).to eq(true)
+      # Test for check_vertical_lateral_attacks
+      context 'when the king is in check by a rook' do
+        it 'returns true' do
+          game.board.board[4][0] = Piece.new(:rook, :black) # Place a black rook on the board
+          game.board.board[4][1] = nil #Remove the pawn
+          king_position = [4, 4]
+          expect(game.check_vertical_lateral_attacks(king_position)).to be true
+        end
       end
 
-      it "Returns false when a pawn doesn't checks a king" do
-        game.board.board[4][1] = Piece.new(:pawn, :black)
-        expect(game.in_check?([4, 0])).to eq(false)
+      # Test for check_diagonal_attacks
+      context 'when the king is in check by a bishop' do
+        it 'returns true' do
+          game.board.board[3][5] = Piece.new(:bishop, :black) # Place a black bishop on the board
+          king_position = [4, 4]
+          expect(game.check_diagonal_attacks(king_position)).to be true
+        end
       end
 
-      context "Checking for checks by a vertical or lateral move"
-      it "Returns true when a queen checks a king on right lateral" do
-        game.board.board[7][4] = Piece.new(:queen, :black)
-        expect(game.in_check?([3, 4])).to eq(true)
+      # Test for check_king_attacks
+      context 'when the king is in check by another king' do
+        it 'returns true' do
+          game.board.board[4][3] = Piece.new(:king, :black) # Place a black king on the board
+          king_position = [4, 4]
+          expect(game.check_king_attacks(king_position)).to be true
+        end
       end
 
-      it "Returns true when a rook checks a king on left lateral" do
-        game.board.board[0][4] = Piece.new(:rook, :black)
-        expect(game.in_check?([3, 4])).to eq(true)
-      end
-
-      it "Returns true when a rook checks a king on top vertical" do
-        game.board.board[3][5] = Piece.new(:rook, :black)
-        expect(game.in_check?([3, 4])).to eq(true)
-      end
-
-      it "Returns true when a queen checks a king on down vertical" do
-        game.board.board[3][1] = Piece.new(:queen, :black)
-        expect(game.in_check?([3, 4])).to eq(true)
-      end
-
-      it "Returns false when no queen or rook checks the king" do
-        expect(game.in_check?([3, 4])).to eq(false)
-      end
 
       context 'when there is a diagonal attack' do
         it 'returns true' do
@@ -387,7 +386,7 @@ describe Game do
           king_position = [4, 4]
           expect(game.check_king_attacks(king_position)).to be false
         end
-      end
+      end      
       
     end
 

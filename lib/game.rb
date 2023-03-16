@@ -153,15 +153,41 @@ class Game
     end
 
     def in_check?(king_position)
-        check_knight_attacks(king_position) || check_pawn_attacks(king_position) || check_vertical_lateral_attacks(king_position) || check_diagonal_attacks(king_position) || check_king_attacks(king_position) ? true : false
-    end
+        in_check = check_knight_attacks(king_position) || check_pawn_attacks(king_position) || check_vertical_lateral_attacks(king_position) || check_diagonal_attacks(king_position) || check_king_attacks(king_position)
+      
+        if in_check
+          if king_belongs_to_current_player?(king_position)
+            warn_player_check
+            choose_destination
+          else
+            warn_opponent_check
+          end
+        end
+      
+        in_check #aquí
+      end
+      
+      def warn_player_check
+        puts "Warning! Your king is in check. Choose your move wisely to protect your king."
+      end
+      
+      def warn_opponent_check
+        puts "Good move! Your opponent's king is in check."
+      end
+      
+      def king_belongs_to_current_player?(king_position)
+        x, y = king_position
+        king_piece = @board.board[x][y]
+        king_piece.type == :king && king_piece.color == @current_player.color.to_sym
+      end
+      
 
     def king_position #returns an array with the coordinates of current_player king
         king_position = []
         @board.board.each_with_index do |row, i|
             row.each_with_index do |piece, j|
             next if piece.nil?
-            if piece.type == :king && piece.color == @current_player.color
+            if piece.type == :king && piece.color == @current_player.color.to_sym
                 king_position << [i, j]
             end
             end
@@ -282,31 +308,29 @@ class Game
         false
       end
 
-      def check_king_attacks(king_position)
+    def check_king_attacks(king_position)
         king_moves = [
-          [-1,  1], [0,  1], [1,  1],
-          [-1,  0],           [1,  0],
-          [-1, -1], [0, -1], [1, -1]
+            [-1,  1], [0,  1], [1,  1],
+            [-1,  0],           [1,  0],
+            [-1, -1], [0, -1], [1, -1]
         ]
-      
+        
         king_moves.each do |move|
-          x, y = king_position[0] + move[0], king_position[1] + move[1]
-      
-          # Skip if the position is outside the board
-          next if x < 0 || x > 7 || y < 0 || y > 7
-      
-          piece = @board.board[x][y]
-          next if piece.nil?
-      
-          if piece.type == :king && piece.color != @current_player.color
+            x, y = king_position[0] + move[0], king_position[1] + move[1]
+        
+            # Skip if the position is outside the board
+            next if x < 0 || x > 7 || y < 0 || y > 7
+        
+            piece = @board.board[x][y]
+            next if piece.nil?
+        
+            if piece.type == :king && piece.color != @current_player.color
             return true
-          end
+            end
         end
-      
+        
         false
-      end
-      
-      
+    end
 
     def game_loop
         display_board
@@ -314,7 +338,7 @@ class Game
         check_origin 
         get_available_moves(@selected_piece.type, get_all_moves(@selected_piece.type, @current_player.origin)) #In creation//TO BE DONE: Add an option when #get_all_moves returns []
         choose_destination 
-        #check_king #to be created
+        in_check?(king_position)
         move_selected_piece
         display_board
         #update_board #to be created
