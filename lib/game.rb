@@ -137,6 +137,7 @@ class Game
                 if @available_moves.include?(@current_player.destination)
                     return
                 else
+                    @current_player.destination = []
                     raise "Invalid move. Please choose a valid destination."
                 end
             end
