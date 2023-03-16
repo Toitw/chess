@@ -93,13 +93,12 @@ class Game
     def check_origin
         if @board.board[@current_player.origin[0]][@current_player.origin[1]].nil?
             puts "There is no piece on that coordinate, please choose another one"
-            false
+            return false
         elsif @board.board[@current_player.origin[0]][@current_player.origin[1]].color != @current_player.color.to_sym
             puts "That is not your piece! Please, choose one of your pieces to move"
-            false
-        else
-            @selected_piece = @board.board[@current_player.origin[0]][@current_player.origin[1]]
+            return false
         end
+        @selected_piece = @board.board[@current_player.origin[0]][@current_player.origin[1]]
     end
 
     def get_all_moves(piece_type, pos) #Gets all the posible moves inside the board, ignoring pieces
@@ -352,8 +351,8 @@ class Game
     end
 
     def origin_destination_loop
-        while choose_origin == false
-            check_origin
+        choose_origin
+        while check_origin == false
             choose_origin
         end
         get_available_moves(@selected_piece.type, get_all_moves(@selected_piece.type, @current_player.origin))
