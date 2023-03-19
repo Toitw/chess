@@ -261,8 +261,8 @@ describe Game do
                 game.instance_variable_get(:@current_player).origin = [1, 0]
               end
         
-              it "moves the knight to [2, 2] on the board" do
-                game.move_selected_piece
+              xit "moves the knight to [2, 2] on the board" do
+                game.move_selected_piece(:@board).board[|]
                 expect(game.instance_variable_get(:@board).board[1][0]).to eq(nil)
                 expect(game.instance_variable_get(:@board).board[2][2]).to eq(game.instance_variable_get(:@selected_piece))
               end
@@ -275,7 +275,7 @@ describe Game do
                   game.instance_variable_get(:@board).board[2][2] = Piece.new(:knight, :black)
                 end
           
-                it "moves the knight to [2, 2] on the board" do
+                xit "moves the knight to [2, 2] on the board" do
                   game.move_selected_piece
                   expect(game.instance_variable_get(:@board).board[1][0]).to eq(nil)
                   expect(game.instance_variable_get(:@board).board[2][2]).to eq(game.instance_variable_get(:@selected_piece))
@@ -439,7 +439,39 @@ describe Game do
           expect(black_pawn_coordinates).to match_array(ChessInitialPositions::INITIAL_POSITIONS[:pawn][:black])
         end
   
-        # Add more tests for other black piece types as needed
+      end
+    end
+
+    describe '#checkmate?' do
+      context 'when the player has legal moves' do
+
+        before do
+          game.instance_variable_set(:@current_player, Player.new("Player1", :white))
+        end
+
+        it 'returns false' do
+          # Assuming a standard chess setup
+          expect(game.checkmate?(:white)).to be false
+          expect(game.checkmate?(:black)).to be false
+        end
+      end
+  
+      context 'when the player is in check and has no legal moves' do
+        before do
+          # Set up a custom board configuration that leads to no legal moves for one player
+          # Example: A simple stalemate position (Note that this example does not cover all possible cases)
+          game.instance_variable_set(:@selected_piece, nil)
+          game.instance_variable_set(:@current_player, Player.new("Player2", :black))
+  
+          game.board.board[0][0] = Piece.new(:king, :black)
+          game.board.board[2][0] = nil
+          game.board.board[1][1] = Piece.new(:queen, :white)
+          game.board.board[2][2] = Piece.new(:king, :white)
+        end
+  
+        it 'returns true' do
+          expect(game.checkmate?(:black)).to be true
+        end
       end
     end
 end

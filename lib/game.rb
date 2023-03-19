@@ -147,14 +147,14 @@ class Game
         end
     end
 
-    def move_selected_piece
-        @board.board[@current_player.destination[0]][@current_player.destination[1]] = @selected_piece
-        @board.board[@current_player.origin[0]][@current_player.origin[1]] = nil
+    def move_selected_piece(board)
+        board[@current_player.destination[0]][@current_player.destination[1]] = @selected_piece
+        board[@current_player.origin[0]][@current_player.origin[1]] = nil
     end
 
-    def move_back_selected_piece
-        @board.board[@current_player.origin[0]][@current_player.origin[1]] = @selected_piece
-        @board.board[@current_player.destination[0]][@current_player.destination[1]] = nil
+    def move_back_selected_piece(board)
+        board[@current_player.origin[0]][@current_player.origin[1]] = @selected_piece
+        board[@current_player.destination[0]][@current_player.destination[1]] = nil
     end
 
     def in_check?(king_position)
@@ -352,12 +352,8 @@ class Game
     end
 
     #game_over methods
-    def game_over?
-        checkmate? || stalemate? || insufficient_material? || threefold_repetition? || fifty_move_rule?
-    end
-
-    def checkmate?
-        in_check?(king_position) && no_legal_moves?(player)
+    def game_over?(current_player_color)
+        checkmate?(current_player_color) #|| stalemate? || insufficient_material? || threefold_repetition? || fifty_move_rule?
     end
 
     def find_pieces_by_color(color)
@@ -376,7 +372,33 @@ class Game
         
         pieces
     end
+
+    def checkmate?(current_player_color)
+        find_pieces_by_color(current_player_color).each do |piece_info|
+            simulated_board = @board.board
+            position = piece_info[:coordinates]
+            piece_type = piece_info[:type]
+            @selected_piece = simulated_board[position[0]][position[1]]
+            # Make the move
+            get_available_moves(piece_type, get_all_moves(piece_type, position)).each do |move|
+                @current_player.destination = move
+                @current_player.origin = position
+                move_selected_piece(simulated_board)
+                # Check if the king is in check
+                if in_check?(king_position) == true
+                # Move the piece back to its original position
+                    move_back_selected_piece(simulated_board)
+                    true
+                elsif in_check?(king_position) == false
+                    move_back_selected_piece(simulated_board)
+                    return false
+                end
+            end
+        end
+        true
+    end
     
+    #Game loop
     def origin_destination_loop
         choose_origin
         while check_origin == false
@@ -384,7 +406,7 @@ class Game
         end
         get_available_moves(@selected_piece.type, get_all_moves(@selected_piece.type, @current_player.origin))
         choose_destination
-        move_selected_piece
+        move_selected_piece(@board.board)
     end 
 
     def game_loop
@@ -395,12 +417,15 @@ class Game
         origin_destination_loop
         while in_check?(king_position)
             warn_player_check
-            move_back_selected_piece
+            move_back_selected_piece(@board.board)
             origin_destination_loop
         end
-        #game_over? in creation
         display_board
         change_current_player 
+        if game_over?(@current_player.color.to_sym) == true
+            puts "Victory"
+            return
+        end
     end 
       
 end
