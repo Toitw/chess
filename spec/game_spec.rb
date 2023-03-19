@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
 require './lib/game'
+require_relative '/home/juroga/Code/top_projects/Ruby/chess/lib/chessInitialPositions'
 
 describe Game do
+  include ChessInitialPositions
     subject(:game) { described_class.new }
     describe "check_color" do
       subject(:new_game) { described_class.new }
@@ -407,5 +409,38 @@ describe Game do
       
     end
 
+    describe '#find_pieces_by_color' do
+      context 'when the color is white' do
+        let(:white_pieces) { described_class.new.find_pieces_by_color(:white) }
+  
+        it 'returns the correct number of white pieces' do
+          expect(white_pieces.count).to eq(16) # Assuming a standard chess setup
+        end
+  
+        it 'returns white pawns with correct coordinates' do
+          white_pawns = white_pieces.select { |piece| piece[:type] == :pawn }
+          white_pawn_coordinates = white_pawns.map { |pawn| pawn[:coordinates] }
+          expect(white_pawn_coordinates).to match_array(ChessInitialPositions::INITIAL_POSITIONS[:pawn][:white])
+        end
+  
+        # Add more tests for other white piece types as needed
+      end
+  
+      context 'when the color is black' do
+        let(:black_pieces) { described_class.new.find_pieces_by_color(:black) }
+  
+        it 'returns the correct number of black pieces' do
+          expect(black_pieces.count).to eq(16) # Assuming a standard chess setup
+        end
+  
+        it 'returns black pawns with correct coordinates' do
+          black_pawns = black_pieces.select { |piece| piece[:type] == :pawn }
+          black_pawn_coordinates = black_pawns.map { |pawn| pawn[:coordinates] }
+          expect(black_pawn_coordinates).to match_array(ChessInitialPositions::INITIAL_POSITIONS[:pawn][:black])
+        end
+  
+        # Add more tests for other black piece types as needed
+      end
+    end
 end
   

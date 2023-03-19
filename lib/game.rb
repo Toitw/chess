@@ -351,6 +351,32 @@ class Game
         false
     end
 
+    #game_over methods
+    def game_over?
+        checkmate? || stalemate? || insufficient_material? || threefold_repetition? || fifty_move_rule?
+    end
+
+    def checkmate?
+        in_check?(king_position) && no_legal_moves?(player)
+    end
+
+    def find_pieces_by_color(color)
+        board = @board.board
+        pieces = []
+        board.each_with_index do |column, column_index|
+            column.each_with_index do |piece, row_index|
+              if piece && piece.color == color
+                pieces << {
+                  coordinates: [column_index, row_index],
+                  type: piece.type
+                }
+              end
+            end
+        end
+        
+        pieces
+    end
+    
     def origin_destination_loop
         choose_origin
         while check_origin == false
@@ -372,8 +398,8 @@ class Game
             move_back_selected_piece
             origin_destination_loop
         end
+        #game_over? in creation
         display_board
-        #update_board #to be created
         change_current_player 
     end 
       
