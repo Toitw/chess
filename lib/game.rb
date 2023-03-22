@@ -5,6 +5,7 @@ require_relative "piece"
 require_relative "player"
 require_relative "visual"
 require_relative "chessPieceMoves"
+require "yaml"
 
 class Game
     include ChessPieceMoves
@@ -43,6 +44,7 @@ class Game
             puts "\n#{word}"
             sleep(1)
         end
+        puts "\n To open the help menu (SAVE, LOAD, RESTART) write down 'HELP'"
     end
 
     def choose_origin #Gets only valid letter + number, store it as an array in @current_player.origin, raise an error if invalid
@@ -488,5 +490,44 @@ class Game
             puts "\n Thank you for playing"
         end
     end
-      
+    
+    #Help menu methods, save, load and retry
+    #Help menu
+    def help_menu
+        
+    end
+    #Save
+    def create_saved_games_directory(directory_path)
+        Dir.mkdir(directory_path) unless Dir.exist?(directory_path)
+      end
+    
+    def save_game(file_name)
+        game_data = {
+            board: @board,
+            player1: @player1,
+            player2: @player2
+          }
+        File.open(file_name, 'w') do |file|
+          file.write(YAML.dump(game_data))
+        end
+        puts "Game saved to #{game_data}"
+    end
+
+    def file_name
+        puts "\n Please, write a name for your game"
+        file_name = gets.chomp
+        file_name
+    end
+
+    #Load
+    def load_game(file_name)
+        game_data = YAML.load_file(file_name)
+    
+        @board = game_data[:board]
+        @player1 = game_data[:player1]
+        @player2 = game_data[:player2]
+    
+        puts "Game loaded from #{file_name}"
+    end
+
 end
