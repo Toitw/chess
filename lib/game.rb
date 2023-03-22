@@ -29,7 +29,12 @@ class Game
         start_animation
         loop do
             game_loop
+            if game_over?(@current_player.color.to_sym) == true
+                puts "\n Game Over! #{@current_player.name} wins."
+                break
+            end
         end
+        play_again?
     end
 
     def start_animation
@@ -472,10 +477,16 @@ class Game
         end
         display_board
         change_current_player 
-        if game_over?(@current_player.color.to_sym) == true
-            puts "Victory"
-            return
-        end
     end 
+
+    def play_again?
+        puts "\n Would you like to play again? Y/N"
+        answer = gets.chomp
+        if answer == "Y"
+            Game.new.play
+        else
+            puts "\n Thank you for playing"
+        end
+    end
       
 end
