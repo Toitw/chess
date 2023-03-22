@@ -262,7 +262,7 @@ describe Game do
               end
         
               xit "moves the knight to [2, 2] on the board" do
-                game.move_selected_piece(:@board).board[|]
+                game.move_selected_piece(:@board)
                 expect(game.instance_variable_get(:@board).board[1][0]).to eq(nil)
                 expect(game.instance_variable_get(:@board).board[2][2]).to eq(game.instance_variable_get(:@selected_piece))
               end
@@ -465,6 +465,8 @@ describe Game do
   
           game.board.board[0][0] = Piece.new(:king, :black)
           game.board.board[2][0] = nil
+          game.board.board[1][0] = nil
+          game.board.board[3][1] = nil
           game.board.board[1][1] = Piece.new(:queen, :white)
           game.board.board[2][2] = Piece.new(:king, :white)
         end

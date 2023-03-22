@@ -154,7 +154,7 @@ module ChessPieceMoves
       bishop_moves(pos) + rook_moves(pos)
     end
   
-    def king_moves(pos)
+    def king_moves(pos) 
       moves = []
   
       x, y = pos
@@ -167,8 +167,8 @@ module ChessPieceMoves
       moves << [x - 1, y - 1]
       moves << [x, y - 1]
       moves << [x + 1, y - 1]
-  
-      moves
+      
+      moves.select { |x, y| x.between?(0, 7) && y.between?(0, 7) }
     end
   
     def pawn_moves(pos, color)
@@ -178,14 +178,18 @@ module ChessPieceMoves
       
       if color == :white
         moves << [x, y + 1]
-        moves << [x, y + 2] if y == 1 && @board.board[x][y+1].nil?
-        moves << [x + 1, y + 1] if !@board.board[x + 1][y + 1].nil? && @board.board[x + 1][y + 1].color == :black
-        moves << [x - 1, y + 1] if !@board.board[x - 1][y + 1].nil? && @board.board[x - 1][y + 1].color == :black
+        moves << [x, y + 2] if y == 1 && @board.board[x][y + 1].nil? 
+        if x <= 6 && x >=1
+          moves << [x + 1, y + 1] if !@board.board[x + 1][y + 1].nil? 
+          moves << [x - 1, y + 1] if !@board.board[x - 1][y + 1].nil? 
+        end
       else
         moves << [x, y - 1]
-        moves << [x, y - 2] if y == 6 && @board.board[x][y-1].nil?
-        moves << [x + 1, y - 1] if !@board.board[x + 1][y - 1].nil? && @board.board[x + 1][y - 1].color == :white
-        moves << [x - 1, y - 1] if !@board.board[x - 1][y - 1].nil? && @board.board[x - 1][y - 1].color == :white
+        moves << [x, y - 2] if y == 6 && @board.board[x][y - 1].nil?
+        if x <= 6 && x >=1
+          moves << [x + 1, y - 1] if !@board.board[x + 1][y - 1].nil?
+          moves << [x - 1, y - 1] if !@board.board[x - 1][y - 1].nil?
+        end
       end
   
       moves

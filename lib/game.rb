@@ -373,24 +373,26 @@ class Game
         pieces
     end
 
+    def deep_copy_board(board) #this is to create a deep copy of board to use in checkmate?
+        board.map { |row| row.dup }
+      end
+      
+
     def checkmate?(current_player_color)
-        find_pieces_by_color(current_player_color).each do |piece_info|
-            simulated_board = @board.board
+        find_pieces_by_color(current_player_color).each do |piece_info| 
             position = piece_info[:coordinates]
             piece_type = piece_info[:type]
-            @selected_piece = simulated_board[position[0]][position[1]]
+            @selected_piece = @board.board[position[0]][position[1]]
             # Make the move
-            get_available_moves(piece_type, get_all_moves(piece_type, position)).each do |move|
+            get_available_moves(piece_type, get_all_moves(piece_type, position)).each do |move| #revisar, coge moves negativos del rey y los movimientos de los peones están mal
+                simulated_board = deep_copy_board(@board.board)
                 @current_player.destination = move
                 @current_player.origin = position
                 move_selected_piece(simulated_board)
                 # Check if the king is in check
                 if in_check?(king_position) == true
-                # Move the piece back to its original position
-                    move_back_selected_piece(simulated_board)
                     true
-                elsif in_check?(king_position) == false
-                    move_back_selected_piece(simulated_board)
+                else
                     return false
                 end
             end
