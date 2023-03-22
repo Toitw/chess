@@ -353,7 +353,7 @@ class Game
 
     #game_over methods
     def game_over?(current_player_color)
-        checkmate?(current_player_color) #|| stalemate? || insufficient_material? || threefold_repetition? || fifty_move_rule?
+        checkmate?(current_player_color) || insufficient_materials? #|| threefold_repetition? || fifty_move_rule?
     end
 
     def find_pieces_by_color(color)
@@ -399,6 +399,54 @@ class Game
         end
         true
     end
+
+    def insufficient_materials?
+        white_pieces = find_pieces_by_color(:white)
+        black_pieces = find_pieces_by_color(:black)
+    
+        return true if only_kings?(white_pieces, black_pieces)
+        return true if king_and_bishops_only?(white_pieces, black_pieces)
+        return true if king_and_knights_only?(white_pieces, black_pieces)
+    
+        false
+    end
+    
+    def only_kings?(white_pieces, black_pieces)
+        white_pieces.count == 1 && black_pieces.count == 1 &&
+        white_pieces.first[:type] == :king && black_pieces.first[:type] == :king
+    end
+    
+    
+    def king_and_bishops_only?(white_pieces, black_pieces)
+        all_pieces = white_pieces + black_pieces
+        return false unless all_pieces.all? { |piece| [:king, :bishop].include?(piece[:type]) }
+    
+        white_bishops = white_pieces.select { |piece| piece[:type] == :bishop }
+        black_bishops = black_pieces.select { |piece| piece[:type] == :bishop }
+    
+        white_bishops_on_same_color = same_color_squares?(white_bishops)
+        black_bishops_on_same_color = same_color_squares?(black_bishops)
+    
+        white_bishops_on_same_color && black_bishops_on_same_color
+    end
+    
+    def king_and_knights_only?(white_pieces, black_pieces)
+        all_pieces = white_pieces + black_pieces
+        all_pieces.all? { |piece| [:king, :knight].include?(piece[:type]) }
+    end
+    
+    def same_color_squares?(bishops)
+        return true if bishops.empty?
+    
+        first_square_color = square_color(bishops.first[:coordinates])
+        bishops.all? { |bishop| square_color(bishop[:coordinates]) == first_square_color }
+    end
+    
+    
+    def square_color(coordinates)
+        x, y = coordinates
+        (x + y) % 2 == 0 ? :light : :dark
+    end   
     
     #Game loop
     def origin_destination_loop

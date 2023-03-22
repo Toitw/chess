@@ -476,5 +476,78 @@ describe Game do
         end
       end
     end
+
+    describe '#only_kings?' do
+      it 'returns true when there are only kings' do
+        white_pieces = [{ type: :king, coordinates: [4, 0] }]
+        black_pieces = [{ type: :king, coordinates: [4, 7] }]
+        expect(game.only_kings?(white_pieces, black_pieces)).to be true
+      end
+  
+      it 'returns false when there are other pieces' do
+        white_pieces = [{ type: :king, coordinates: [4, 0] }, { type: :bishop, coordinates: [2, 0] }]
+        black_pieces = [{ type: :king, coordinates: [4, 7] }]
+        expect(game.only_kings?(white_pieces, black_pieces)).to be false
+      end
+    end
+
+    describe '#same_color_squares?' do
+      it 'returns true when bishops are on the same color squares' do
+        bishops = [{ type: :bishop, coordinates: [1, 1] }, { type: :bishop, coordinates: [3, 3] }]
+        expect(game.same_color_squares?(bishops)).to be true
+      end
+  
+      it 'returns false when bishops are on different color squares' do
+        bishops = [{ type: :bishop, coordinates: [1, 1] }, { type: :bishop, coordinates: [2, 3] }]
+        expect(game.same_color_squares?(bishops)).to be false
+      end
+    end
+
+    describe '#insufficient_materials?' do
+      it 'returns true when only kings are on the board' do
+        allow(game).to receive(:only_kings?).and_return(true)
+        expect(game.insufficient_materials?).to be true
+      end
+  
+      it 'returns true when kings and bishops are on the board and bishops are on the same color squares' do
+        allow(game).to receive(:only_kings?).and_return(false)
+        allow(game).to receive(:king_and_bishops_only?).and_return(true)
+        expect(game.insufficient_materials?).to be true
+      end
+  
+      it 'returns false when other pieces are on the board' do
+        allow(game).to receive(:only_kings?).and_return(false)
+        allow(game).to receive(:king_and_bishops_only?).and_return(false)
+        expect(game.insufficient_materials?).to be false
+      end
+    end
+
+    describe '#king_and_bishops_only?' do
+      it 'returns true when only kings and bishops are on the board, and all bishops are on the same color squares' do
+        white_pieces = [
+          { type: :king, coordinates: [4, 0] },
+          { type: :bishop, coordinates: [2, 0] }
+        ]
+        black_pieces = [
+          { type: :king, coordinates: [4, 7] },
+          { type: :bishop, coordinates: [2, 7] }
+        ]
+        expect(game.king_and_bishops_only?(white_pieces, black_pieces)).to be true
+      end
+  
+      it 'returns false when other pieces are on the board' do
+        white_pieces = [
+          { type: :king, coordinates: [4, 0] },
+          { type: :bishop, coordinates: [2, 0] },
+          { type: :knight, coordinates: [1, 0] }
+        ]
+        black_pieces = [
+          { type: :king, coordinates: [4, 7] },
+          { type: :bishop, coordinates: [2, 7] }
+        ]
+        expect(game.king_and_bishops_only?(white_pieces, black_pieces)).to be false
+      end
+    end
+
 end
   
