@@ -25,6 +25,7 @@ class Board
   end
 
   def display_board
+    puts "\n To open the help menu (SAVE, LOAD, RESTART) write down 'HELP'"
     puts "  ---------------------------------"
     @board.transpose.reverse.each_with_index do |column, y|
       print "#{8-y} |"

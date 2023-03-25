@@ -44,15 +44,17 @@ class Game
             puts "\n#{word}"
             sleep(1)
         end
-        puts "\n To open the help menu (SAVE, LOAD, RESTART) write down 'HELP'"
     end
 
     def choose_origin #Gets only valid letter + number, store it as an array in @current_player.origin, raise an error if invalid
         puts "\n#{@current_player.name} Please, enter the coordinate of the piece you want to move (First a letter a-h, then a number 1-8, e.g. 'e4')"
             begin
                 raw_input = gets.chomp
-                if raw_input[0].match?(/^[a-hA-H]$/) == false || raw_input[1] == nil || raw_input[1].match?(/^[1-8]$/) == false
-                raise "Invalid input: '#{raw_input}'. Please enter a valid chess coordinate (First a letter a-h, then a number 1-8, e.g. 'e4')"
+                if raw_input == "HELP"
+                    help_menu
+                    choose_origin
+                elsif raw_input[0].match?(/^[a-hA-H]$/) == false || raw_input[1] == nil || raw_input[1].match?(/^[1-8]$/) == false
+                    raise "Invalid input: '#{raw_input}'. Please enter a valid chess coordinate (First a letter a-h, then a number 1-8, e.g. 'e4')"
                 else
                 @current_player.origin = [(raw_input[0].downcase.ord - 97), (raw_input[1].to_i)-1]
                 end
@@ -494,24 +496,38 @@ class Game
     #Help menu methods, save, load and retry
     #Help menu
     def help_menu
-        
+        puts "\n Write the number of the option you would like"
+        puts "\n 1 - Save game"
+        puts "\n 2 - Load game"
+        puts "\n 3 - Restart"
+        puts "\n 4 - Back to game"
+        selection = gets.chomp
+        if selection == "1"
+            save_game(file_name)
+        else
+            "To be implemented"
+        end
     end
     #Save
-    def create_saved_games_directory(directory_path)
-        Dir.mkdir(directory_path) unless Dir.exist?(directory_path)
-      end
     
     def save_game(file_name)
         game_data = {
             board: @board,
             player1: @player1,
             player2: @player2
-          }
-        File.open(file_name, 'w') do |file|
-          file.write(YAML.dump(game_data))
+        }
+
+        folder_name = "saved_games"
+        Dir.mkdir(folder_name) unless File.exists?(folder_name)
+
+        file_path = File.join(folder_name, file_name)
+        File.open(file_path, 'w') do |file|
+            file.write(YAML.dump(game_data))
         end
-        puts "Game saved to #{game_data}"
+
+        puts "Game saved to #{file_path}"
     end
+
 
     def file_name
         puts "\n Please, write a name for your game"

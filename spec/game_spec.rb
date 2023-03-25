@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require './lib/game'
+require 'fileutils'
 require_relative '/home/juroga/Code/top_projects/Ruby/chess/lib/chessInitialPositions'
 
 describe Game do
