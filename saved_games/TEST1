@@ -116,11 +116,11 @@
   - - !ruby/object:Piece
       type: :rook
       color: :white
+    -
+    -
     - !ruby/object:Piece
       type: :pawn
       color: :white
-    -
-    -
     -
     -
     - !ruby/object:Piece
@@ -130,12 +130,20 @@
       type: :rook
       color: :black
 :player1: !ruby/object:Player
-  name: juan
+  name: JUNA
   color: white
-  origin: []
-  destination: []
+  origin:
+  - 7
+  - 1
+  destination:
+  - 7
+  - 3
 :player2: !ruby/object:Player
-  name: pol
+  name: KDJAF
   color: black
-  origin: []
-  destination: []
+  origin:
+  - 0
+  - 6
+  destination:
+  - 0
+  - 5

@@ -6,6 +6,7 @@ require_relative "player"
 require_relative "visual"
 require_relative "chessPieceMoves"
 require "yaml"
+require "tty-prompt"
 
 class Game
     include ChessPieceMoves
@@ -18,6 +19,7 @@ class Game
         @current_player = @player1
         @selected_piece = nil
         @available_moves = nil
+        @prompt = TTY::Prompt.new
     end
 
     def display_board
@@ -25,17 +27,24 @@ class Game
     end
 
     def play
-        puts "welcome"
-        create_players
-        start_animation
-        loop do
-            game_loop
-            if game_over?(@current_player.color.to_sym) == true
-                puts "\n Game Over! #{@current_player.name} wins."
-                break
+        puts "welcome to chess. Press 1 to play a new game and 2 to load a previous game"
+        selection = gets.chomp
+        if selection == "1"
+            create_players
+            start_animation
+            loop do
+                game_loop
+                if game_over?(@current_player.color.to_sym) == true
+                    puts "\n Game Over! #{@current_player.name} wins."
+                    break
+                end
             end
+            play_again?
+        elsif selection == "2"
+            display_files
+        else
+            play
         end
-        play_again?
     end
 
     def start_animation
@@ -52,7 +61,7 @@ class Game
                 raw_input = gets.chomp
                 if raw_input == "HELP"
                     help_menu
-                    choose_origin
+                    board.display_board
                 elsif raw_input[0].match?(/^[a-hA-H]$/) == false || raw_input[1] == nil || raw_input[1].match?(/^[1-8]$/) == false
                     raise "Invalid input: '#{raw_input}'. Please enter a valid chess coordinate (First a letter a-h, then a number 1-8, e.g. 'e4')"
                 else
@@ -498,33 +507,44 @@ class Game
     def help_menu
         puts "\n Write the number of the option you would like"
         puts "\n 1 - Save game"
-        puts "\n 2 - Load game"
-        puts "\n 3 - Restart"
+        puts "\n 2 - Restart"
+        puts "\n 3 - Back to game"
         puts "\n 4 - Back to game"
         selection = gets.chomp
         if selection == "1"
             save_game(file_name)
+        elsif selection == "2"
+            Game.new.play
         else
-            "To be implemented"
+            return
         end
     end
-    #Save
-    
-    def save_game(file_name)
-        game_data = {
-            board: @board,
-            player1: @player1,
-            player2: @player2
-        }
 
+    #Save
+    def save_game(file_name)
+        board_data = @board.board.map do |row|
+          row.map do |cell|
+            if cell.nil?
+              nil
+            else
+              { type: cell.type, color: cell.color }
+            end
+          end
+        end
+      
+        game_data = {
+          board: board_data,
+          player1: @player1,
+          player2: @player2
+        }
+      
         folder_name = "saved_games"
         Dir.mkdir(folder_name) unless File.exists?(folder_name)
-
+      
         file_path = File.join(folder_name, file_name)
         File.open(file_path, 'w') do |file|
-            file.write(YAML.dump(game_data))
+          file.write(YAML.dump(game_data))
         end
-
         puts "Game saved to #{file_path}"
     end
 
@@ -537,13 +557,46 @@ class Game
 
     #Load
     def load_game(file_name)
-        game_data = YAML.load_file(file_name)
+    require_relative 'board'
+    require_relative 'player'
     
-        @board = game_data[:board]
-        @player1 = game_data[:player1]
-        @player2 = game_data[:player2]
+    # Whitelist the Player and Board classes for YAML loading
+    permitted_classes = [Player, Board, Symbol]
     
-        puts "Game loaded from #{file_name}"
+    game_data = YAML.safe_load(File.read(file_name), permitted_classes: permitted_classes)
+
+    board_data = game_data[:board]
+    reconstructed_board = Board.new
+
+    board_data.each_with_index do |row, row_index|
+        row.each_with_index do |cell, col_index|
+        if cell.nil?
+            reconstructed_board.board[row_index][col_index] = nil
+        else
+            reconstructed_board.board[row_index][col_index] = Piece.new(cell[:type], cell[:color])
+        end
+        end
     end
+
+    # Update the current game's data with the loaded game's data
+    @board = reconstructed_board
+    @player1 = game_data[:player1]
+    @player2 = game_data[:player2]
+
+    puts "Game loaded from #{file_name}"
+    end
+
+
+    def display_files
+        files = Dir.glob('/home/juroga/Code/top_projects/Ruby/chess/saved_games/*') # This assumes all the game files have a .yaml extension
+        if files.empty?
+          puts "No game files found."
+          return
+        end
+    
+        selected_file = @prompt.select("Choose a file to load:", files)
+        load_game(selected_file)
+        puts "Game loaded"
+      end
 
 end

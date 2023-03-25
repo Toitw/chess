@@ -1,142 +1,109 @@
 ---
-:board: !ruby/object:Board
-  board:
-  - - !ruby/object:Piece
-      type: :rook
-      color: :white
-    - !ruby/object:Piece
-      type: :pawn
-      color: :white
-    -
-    -
-    -
-    -
-    - !ruby/object:Piece
-      type: :pawn
-      color: :black
-    - !ruby/object:Piece
-      type: :rook
-      color: :black
-  - - !ruby/object:Piece
-      type: :knight
-      color: :white
-    - !ruby/object:Piece
-      type: :pawn
-      color: :white
-    -
-    -
-    -
-    -
-    - !ruby/object:Piece
-      type: :pawn
-      color: :black
-    - !ruby/object:Piece
-      type: :knight
-      color: :black
-  - - !ruby/object:Piece
-      type: :bishop
-      color: :white
-    - !ruby/object:Piece
-      type: :pawn
-      color: :white
-    -
-    -
-    -
-    -
-    - !ruby/object:Piece
-      type: :pawn
-      color: :black
-    - !ruby/object:Piece
-      type: :bishop
-      color: :black
-  - - !ruby/object:Piece
-      type: :queen
-      color: :white
-    - !ruby/object:Piece
-      type: :pawn
-      color: :white
-    -
-    -
-    -
-    -
-    - !ruby/object:Piece
-      type: :pawn
-      color: :black
-    - !ruby/object:Piece
-      type: :queen
-      color: :black
-  - - !ruby/object:Piece
-      type: :king
-      color: :white
-    - !ruby/object:Piece
-      type: :pawn
-      color: :white
-    -
-    -
-    -
-    -
-    - !ruby/object:Piece
-      type: :pawn
-      color: :black
-    - !ruby/object:Piece
-      type: :king
-      color: :black
-  - - !ruby/object:Piece
-      type: :bishop
-      color: :white
-    -
-    -
-    - !ruby/object:Piece
-      type: :pawn
-      color: :white
-    -
-    -
-    - !ruby/object:Piece
-      type: :pawn
-      color: :black
-    - !ruby/object:Piece
-      type: :bishop
-      color: :black
-  - - !ruby/object:Piece
-      type: :knight
-      color: :white
-    - !ruby/object:Piece
-      type: :pawn
-      color: :white
-    -
-    -
-    -
-    -
-    - !ruby/object:Piece
-      type: :pawn
-      color: :black
-    - !ruby/object:Piece
-      type: :knight
-      color: :black
-  - - !ruby/object:Piece
-      type: :rook
-      color: :white
-    - !ruby/object:Piece
-      type: :pawn
-      color: :white
-    -
-    -
-    -
-    -
-    - !ruby/object:Piece
-      type: :pawn
-      color: :black
-    - !ruby/object:Piece
-      type: :rook
-      color: :black
+:board:
+- - :type: :rook
+    :color: :white
+  - :type: :pawn
+    :color: :white
+  -
+  -
+  -
+  -
+  - :type: :pawn
+    :color: :black
+  - :type: :rook
+    :color: :black
+- - :type: :knight
+    :color: :white
+  - :type: :pawn
+    :color: :white
+  -
+  -
+  -
+  -
+  - :type: :pawn
+    :color: :black
+  - :type: :knight
+    :color: :black
+- - :type: :bishop
+    :color: :white
+  - :type: :pawn
+    :color: :white
+  -
+  -
+  -
+  -
+  - :type: :pawn
+    :color: :black
+  - :type: :bishop
+    :color: :black
+- - :type: :queen
+    :color: :white
+  -
+  -
+  - :type: :pawn
+    :color: :white
+  -
+  -
+  - :type: :pawn
+    :color: :black
+  - :type: :queen
+    :color: :black
+- - :type: :king
+    :color: :white
+  - :type: :pawn
+    :color: :white
+  -
+  -
+  -
+  -
+  - :type: :pawn
+    :color: :black
+  - :type: :king
+    :color: :black
+- - :type: :bishop
+    :color: :white
+  - :type: :pawn
+    :color: :white
+  -
+  -
+  -
+  -
+  - :type: :pawn
+    :color: :black
+  - :type: :bishop
+    :color: :black
+- - :type: :knight
+    :color: :white
+  - :type: :pawn
+    :color: :white
+  -
+  -
+  -
+  -
+  - :type: :pawn
+    :color: :black
+  - :type: :knight
+    :color: :black
+- - :type: :rook
+    :color: :white
+  - :type: :pawn
+    :color: :white
+  -
+  -
+  -
+  -
+  - :type: :pawn
+    :color: :black
+  - :type: :rook
+    :color: :black
 :player1: !ruby/object:Player
   name: juan
   color: white
   origin:
-  - 5
+  - 3
   - 1
   destination:
-  - 5
+  - 3
   - 3
 :player2: !ruby/object:Player
   name: pol
