@@ -48,7 +48,7 @@ class Game
             new_game
         elsif selection == "2"
             display_files
-            loaded_game
+            continue_playing
         else
             play
         end
@@ -68,7 +68,8 @@ class Game
                 raw_input = gets.chomp
                 if raw_input == "HELP"
                     help_menu
-                    board.display_board
+                    sleep(1)
+                    continue_playing
                 elsif raw_input[0].match?(/^[a-hA-H]$/) == false || raw_input[1] == nil || raw_input[1].match?(/^[1-8]$/) == false
                     raise "Invalid input: '#{raw_input}'. Please enter a valid chess coordinate (First a letter a-h, then a number 1-8, e.g. 'e4')"
                 else
@@ -546,7 +547,7 @@ class Game
             player1: @player1,
             player2: @player2,
             current_player: {
-              alias: current_player_alias
+              alias: current_player_alias #this is needed to fix an error when loading
             }
         }
         
@@ -558,7 +559,8 @@ class Game
         File.open(file_path, 'w') do |file|
           file.write(YAML.dump(game_data))
         end
-        puts "Game saved to #{file_path}" #CUANDO SE GUARDA, LUEGO NO PUEDES METER HELP OTRA VEZ, REVISAR
+        sleep(1)
+        puts "\nGame saved to #{file_path}"
     end
 
 
@@ -640,7 +642,7 @@ class Game
         play_again?
     end
 
-    def loaded_game
+    def continue_playing
         loop do
             game_loop
             if game_over?(@current_player.color.to_sym) == true
