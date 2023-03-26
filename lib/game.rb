@@ -7,6 +7,21 @@ require_relative "visual"
 require_relative "chessPieceMoves"
 require "yaml"
 require "tty-prompt"
+require 'psych'
+
+class Psych::Nodes::Scalar
+    attr_accessor :anchor, :alias
+  
+    def yaml(opts = {})
+      if self.alias
+        "*#{@alias}"
+      elsif @anchor
+        "&#{@anchor} #{super}"
+      else
+        super
+      end
+    end
+end
 
 class Game
     include ChessPieceMoves
@@ -531,12 +546,18 @@ class Game
             end
           end
         end
-      
+        
+        current_player_alias = @current_player == @player1 ? "player1" : "player2"
+
         game_data = {
-          board: board_data,
-          player1: @player1,
-          player2: @player2
+            board: board_data,
+            player1: @player1,
+            player2: @player2,
+            current_player: {
+              alias: current_player_alias
+            }
         }
+        
       
         folder_name = "saved_games"
         Dir.mkdir(folder_name) unless File.exists?(folder_name)
@@ -545,7 +566,7 @@ class Game
         File.open(file_path, 'w') do |file|
           file.write(YAML.dump(game_data))
         end
-        puts "Game saved to #{file_path}"
+        puts "Game saved to #{file_path}" #CUANDO SE GUARDA, LUEGO NO PUEDES METER HELP OTRA VEZ, REVISAR
     end
 
 
@@ -557,33 +578,48 @@ class Game
 
     #Load
     def load_game(file_name)
-    require_relative 'board'
-    require_relative 'player'
-    
-    # Whitelist the Player and Board classes for YAML loading
+
+    # Whitelist the Player, Symbol and Board classes for YAML loading, otherwise was not working
     permitted_classes = [Player, Board, Symbol]
     
     game_data = YAML.safe_load(File.read(file_name), permitted_classes: permitted_classes)
 
+    # Update the current game's data with the loaded game's data
     board_data = game_data[:board]
+    #Reconstructed board, otherwise got an error
     reconstructed_board = Board.new
-
-    board_data.each_with_index do |row, row_index|
-        row.each_with_index do |cell, col_index|
+    reconstructed_board.board = board_data.map do |row|
+        row.map do |cell|
         if cell.nil?
-            reconstructed_board.board[row_index][col_index] = nil
+            nil
         else
-            reconstructed_board.board[row_index][col_index] = Piece.new(cell[:type], cell[:color])
+            Piece.new(cell[:type], cell[:color].to_sym)
         end
         end
     end
 
-    # Update the current game's data with the loaded game's data
+    # Reconstruct the player objects
+    player1_data = game_data[:player1]
+    @player1 = Player.new(player1_data.name, player1_data.color.to_sym)
+    @player1.origin = player1_data.origin
+    @player1.destination = player1_data.destination
+
+    player2_data = game_data[:player2]
+    @player2 = Player.new(player2_data.name, player2_data.color.to_sym)
+    @player2.origin = player2_data.origin
+    @player2.destination = player2_data.destination
+
     @board = reconstructed_board
     @player1 = game_data[:player1]
     @player2 = game_data[:player2]
+    # Resolve the alias for the current_player
+    if game_data[:current_player][:alias] == "player1"
+        @current_player = @player1
+    else
+        @current_player = @player2
+    end
 
-    puts "Game loaded from #{file_name}"
+    puts "\nGame loaded from #{file_name}"
     end
 
 
@@ -596,7 +632,6 @@ class Game
     
         selected_file = @prompt.select("Choose a file to load:", files)
         load_game(selected_file)
-        puts "Game loaded"
-      end
+    end
 
 end
