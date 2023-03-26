@@ -517,12 +517,14 @@ class Game
         puts "\n 1 - Save game"
         puts "\n 2 - Restart"
         puts "\n 3 - Back to game"
-        puts "\n 4 - Back to game"
+        puts "\n 4 - Exit the game"
         selection = gets.chomp
         if selection == "1"
             save_game(file_name)
         elsif selection == "2"
             Game.new.play
+        elsif selection == "4"
+            exit_game
         else
             return
         end
@@ -652,5 +654,11 @@ class Game
         end
         play_again?
     end
+
+    def exit_game
+        puts "\nThanks for playing! Goodbye!"
+        exit
+    end
+      
 
 end

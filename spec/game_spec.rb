@@ -550,5 +550,13 @@ describe Game do
       end
     end
 
+    describe '#exit_game' do
+      it 'prints the farewell message and exits the program' do
+        expect(game).to receive(:puts).with("Thanks for playing! Goodbye!")
+        expect(game).to receive(:exit)
+        game.exit_game
+      end
+    end
+
 end
   
