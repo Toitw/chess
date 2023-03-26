@@ -45,18 +45,10 @@ class Game
         puts "welcome to chess. Press 1 to play a new game and 2 to load a previous game"
         selection = gets.chomp
         if selection == "1"
-            create_players
-            start_animation
-            loop do
-                game_loop
-                if game_over?(@current_player.color.to_sym) == true
-                    puts "\n Game Over! #{@current_player.name} wins."
-                    break
-                end
-            end
-            play_again?
+            new_game
         elsif selection == "2"
             display_files
+            loaded_game
         else
             play
         end
@@ -632,6 +624,31 @@ class Game
     
         selected_file = @prompt.select("Choose a file to load:", files)
         load_game(selected_file)
+    end
+
+    def new_game
+        create_players
+        start_animation
+
+        loop do
+            game_loop
+            if game_over?(@current_player.color.to_sym) == true
+                puts "\n Game Over! #{@current_player.name} wins."
+                break
+            end
+        end
+        play_again?
+    end
+
+    def loaded_game
+        loop do
+            game_loop
+            if game_over?(@current_player.color.to_sym) == true
+                puts "\n Game Over! #{@current_player.name} wins."
+                break
+            end
+        end
+        play_again?
     end
 
 end
