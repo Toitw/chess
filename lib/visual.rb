@@ -1,10 +1,10 @@
 module ChessUnicodePieces
-    UNICODE_PIECES = {
-        king:   { white: "\u2654", black: "\u265A" },
-        queen:  { white: "\u2655", black: "\u265B" },
-        rook:   { white: "\u2656", black: "\u265C" },
-        bishop: { white: "\u2657", black: "\u265D" },
-        knight: { white: "\u2658", black: "\u265E" },
-        pawn:   { white: "\u2659", black: "\u265F" }
-      }
+  UNICODE_PIECES = {
+    king:   { white: "\u265A", black: "\u2654" },
+    queen:  { white: "\u265B", black: "\u2655" },
+    rook:   { white: "\u265C", black: "\u2656" },
+    bishop: { white: "\u265D", black: "\u2657" },
+    knight: { white: "\u265E", black: "\u2658" },
+    pawn:   { white: "\u265F", black: "\u2659" }
+  }
 end
